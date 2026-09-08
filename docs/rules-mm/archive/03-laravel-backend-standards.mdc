@@ -1,28 +1,24 @@
 ---
-description: "[MM] Laravel backend standards — artisan + laravel/framework detect (archive)"
+description: "[MM] Laravel backend စံနှုန်းများ — artisan + laravel/framework တွေ့မှ apply (Deduped split)"
+globs:
+  - "artisan"
+  - "composer.json"
+  - "app/**/*.php"
+  - "routes/**/*.php"
+  - "database/**/*.php"
+  - "bootstrap/**/*.php"
+  - "config/**/*.php"
 alwaysApply: false
 source: _cursor/rules/archive/03-laravel-backend-standards.mdc
 status: archived
 ---
 
-# Laravel Backend Standards
+# Laravel (detect: `artisan` + `composer.json` တွင် `laravel/framework`)
 
-> **Archive:** DBS-FFW repo တွင် Laravel **မရှိ** — reference ဖတ်ရန် copy သာ။
+FastAPI = `05` · Node/Express = `10`။
 
-**Detect:** `artisan` + `composer.json` တွင် `laravel/framework`
-
-**Related:** FastAPI = `05` · Node/Express = `10`
-
----
-
-## General
-
-**Surface:** `backend` / `fullstack`
-
-- Routes / Controllers / Migrations / Eloquent = **Laravel conventions**
-- DB = Eloquent / Query Builder **parameterized** — raw concat SQL **မဆောက်**
-- AuthZ = policies / gates / middleware
-- Form / state-changing → CSRF (`@csrf` / VerifyCsrfToken)
-- Validation = Form Request / validator
-- Secrets = `.env` + `config()` — **hardcode မလုပ်**
-- Test = `phpunit` / `pest` ရှိရင် Testing Gate (`07`) အတိုင်း
+- Surface `backend`/`fullstack`။ Routes/Controllers/Migrations/Eloquent = Laravel conventions။
+- DB = Eloquent/Query Builder parameterized — raw concat SQL မဆောက်။
+- AuthZ = policies/gates/middleware။ Form/state-changing → CSRF (`@csrf`/VerifyCsrfToken)။
+- Validation = Form Request / validator။ Secrets = `.env` + `config()` — hardcode မလုပ်။
+- Test = `phpunit` / `pest` ရှိရင် Testing Gate (`07`) အတိုင်း။

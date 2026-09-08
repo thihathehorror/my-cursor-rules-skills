@@ -1,62 +1,44 @@
 ---
-description: "[MM] Vanilla JS quality — classic ASPX controllers"
+description: "[MM] Vanilla JS quality — classic ASPX controllers — React/SPFx TS မဟုတ်"
 alwaysApply: false
+globs:
+  - "DBS-FFW-classicsite/**/*.{js,aspx}"
+  - "DBS-FFW-classicsite/**/public/js/**/*.js"
 source: _cursor/rules/15-js-code-quality.mdc
 ---
 
-# JS Code Quality (Classic ASPX)
+# JS Code Quality (classic ASPX)
 
-`00-core-fsm` (anti-overengineering / anti-sycophancy) နဲ့ `14-security-appsec` လိုက်နာ။  
-**`01-react-standards` / React/Next MUST rules** ကို ဤ tree မှာ **မသက်ဆိုင်**။
+`00-core-fsm` (anti-overengineering / anti-sycophancy) နှင့် `14-security-appsec` လိုက်နာ။
+ဤ tree မှာ `01-react-standards` သို့ React/Next MUST rules **မသက်ဆိုင်**။
 
----
-
-## Mindsets (စိတ်ထား)
-
+## Mindsets
 - Simplicity · readability · maintainability — premature micro-opts ထက်
 - Less code = less debt
-- **Minimal diffs** — task သက်ဆိုင်ရာသာ; drive-by cleanup **မလုပ်**
+- **Minimal diffs** — task သက်ဆိုင်ရာသာ; drive-by cleanup မလုပ်
 
----
+## Naming
+- `camelCase` functions/vars; `SCREAMING_SNAKE_CASE` module constants
+- Units in names (`timeoutMs`); collections plural; booleans = questions
+- Event handlers `handle*`
+- Domain name သိရင် leftover `d`, `tmp`, `obj`, `x`, သို့ vague `data` မသုံး
 
-## Naming (အမည်ပေးခြင်း)
-
-- `camelCase` functions/vars
-- `SCREAMING_SNAKE_CASE` module constants
-- Units in names (`timeoutMs`)
-- Collections = plural; booleans = questions (`isLoaded`, `hasError`)
-- Event handlers = `handle*`
-- vague names **မသုံး:** `d`, `tmp`, `obj`, `x`, `data` (domain name သိရင်)
-
----
-
-## Guidelines (လမ်းညွှန်)
-
+## Guidelines
 - Early returns — deep nesting ထက်
 - Small pure helpers — sprawling functions ထက်
-- DRY — duplication **real and stable** ဖြစ်မှ
+- DRY — duplication real and stable ဖြစ်မှ
 - Rejected promises handle (`await` / `.catch` / intentional `void` + why)
-- `fetch` မှာ `res.ok` **စစ်**
-
----
+- `fetch` မှာ `res.ok` စစ်
 
 ## Globals (ASPX-safe)
-
-- ad-hoc `window.*` ထက် IIFE / one namespaced object **prefer**
-- secrets ကို `window` **NEVER** stash
-- SharePoint host globals — task မလိုရ unless ထိ
-
----
+- Ad-hoc `window.*` ထက် IIFE / one namespaced object prefer
+- Secrets ကို `window` **NEVER** stash; SharePoint host globals — task မလိုရ unless ထိ
 
 ## Comments
-
 - **English only** (`00` Language) — non-English တွေ့ရင် rewrite
-- WHY only; workarounds = reason + date
+- WHY only။ Workarounds: reason + date
 
----
-
-## Reject (မလုပ်ရ)
-
-- library အသစ် approval မရှိဘဲ ထည့်
-- classic controller JS → React/SPFx **convert** (classic tree ထဲ)
+## Reject
+- Library အသစ် approval မရှိဘဲ ထည့်
+- Classic controller JS ကို classic tree ထဲ React/SPFx အဖြစ် convert
 - `eval` / unsafe `innerHTML` with user data (`14-security-appsec`)

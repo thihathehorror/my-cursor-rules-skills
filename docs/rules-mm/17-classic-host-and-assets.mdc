@@ -1,43 +1,34 @@
 ---
-description: "[MM] Classic→SPFx host width, SiteAssets/CSP, chrome gates"
+description: "[MM] Classic→SPFx host width, SiteAssets/CSP, chrome gates — skill references load"
 alwaysApply: false
+globs:
+  - "DBS-FFW-SPFX/**/*.{tsx,ts,scss}"
+  - "DBS-FFW-SPFX/**/*.manifest.json"
+  - "**/*.module.scss"
+  - ".cursor/skills/classic-to-spfx-migration/**"
 source: _cursor/rules/17-classic-host-and-assets.mdc
 ---
 
-# Classic Host / Assets (gated)
+# Classic host / assets (gated)
 
-**Scope ထဲ:**
-- Full Width WP, SPA host, canvas clip
-- SiteAssets, CSP
-- chrome On/Off
-- bulk baseline wave
+Full Width WP, SPA host, canvas clip, SiteAssets, CSP, chrome On/Off, သို့ bulk baseline wave scope ထဲရှိရင်:
 
----
+1. Bulk all pages / wired baseline → `.cursor/skills/bulk-classic-to-spfx-baseline/SKILL.md` + `docs/migration/`
+2. မဟုတ်ရင် `.cursor/skills/classic-to-spfx-migration/SKILL.md` ဖတ်
+3. References load (UI migrate — typography = **required**, optional မဟုတ်):
+   - Segoe inherit / font-weight / menu link underline self-check → `references/visual-typography.md` **(`classic-visual-parity` တွဲ)**
+   - Full-width / SPA / 450px clip → `references/host-modes.md`
+   - Site Pages chrome hide → `references/site-chrome.md`
+   - Images/vendor/CSP/remount → `references/siteassets-gotchas.md`
 
-## Load order (ဖတ်ရမည့် အစဉ်)
-
-1. **Bulk all pages / wired baseline** → `bulk-classic-to-spfx-baseline/SKILL.md` + `docs/migration/`
-2. **Otherwise** → `classic-to-spfx-migration/SKILL.md`
-3. **References load:**
-   - `visual-typography.md` — **required** (typography self-check, `classic-visual-parity` တွဲ)
-   - `host-modes.md` — full-width / SPA / 450px clip
-   - `site-chrome.md` — Site Pages chrome hide
-   - `siteassets-gotchas.md` — images/vendor/CSP/remount
-
----
-
-## This repo (DBS-FFW)
-
-- **One web part per classic page** — hub `pageKey` router **မသုံး**
-- Classic chrome = **inline per ASPX** — `ui-loader` / PortalShell AC **မသုံး** (user မတောင်းမှ)
-- Data = **`SPHttpClient`**; `@pnp/sp` = ask-first
+## This repo
+- Classic page တစ်ခု = web part တစ်ခု (hub `pageKey` router မသုံး)
+- Classic chrome = **inline per ASPX** — user မတောင်းရင် `ui-loader` / PortalShell AC မသုံး
+- Data = `SPHttpClient`; `@pnp/sp` ask-first
 - Visual SoT = `classic-visual-parity` + `uikit-to-spfx-visual-parity`
 
----
-
-## Reject (မလုပ်ရ)
-
-- Yeoman/Heft into classic ASPX root
+## Reject
+- Yeoman/Heft ကို classic ASPX root ထဲ ထည့်
 - `blob:` classic script boot
 - Hardcoded `/sites/…` URLs
-- Fluent restyle before Visual PASS
+- Visual PASS မတိုင်မီ Fluent restyle

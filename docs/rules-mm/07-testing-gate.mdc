@@ -1,67 +1,19 @@
 ---
-description: "[MM] Testing Gate — Auto-Recovery, Manual Check, Security hook, E2E"
+description: "[MM] Testing Gate — Auto-Recovery ≤၂၊ Manual Check၊ Security hook၊ E2E Playwright/Cypress (Deduped split)"
 alwaysApply: false
+globs:
+  - "DBS-FFW-SPFX/src/**/*.{ts,tsx}"
+  - "DBS-FFW-SPFX/**/*.{test,spec}.{ts,tsx,js}"
+  - "DBS-FFW-classicsite/**/*.{js,aspx}"
 source: _cursor/rules/07-testing-gate.mdc
 ---
 
 # Testing Gate (Mode A + Mode B STEP 3)
 
-## Command ရှာဖွေမှု
-
-`package.json` / CI မှ `test` / `lint` / `typecheck` / `build` / `gulp bundle` / `gulp test` / E2E (`playwright test` / `cypress run`) ရှာ
-
-- **ရှိရင်:** ပြင်ပြီးတိုင်း Terminal မောင်း → Pass/Fail အစီရင်ခံ
-
----
-
-## Auto-Recovery (≤ ၂ ခါ)
-
-1. Fail → root cause ရှာ
-2. သက်ဆိုင်ရာသာ ပြင်
-3. ပြန်မောင်း
-
-- Self-correct **≤ ၂**
-- Identical fail ×2 / env·deps·permission / scope-ပြင်ပ → retry မလုပ်၊ ချက်ချင်း အစီရင်ခံ
-- Recovery အတွက် **မသက်ဆိုင်ဖိုင် မထိ**
-
----
-
-## Manual Check (command မရှိရင်)
-
-path / action / expected ဖြင့် Manual Check
-
-- **SharePoint Classic/ASPX:** browser/site page smoke (script load, list R/W, permission)
-- **ဤ repo classic → SPFx UI:** visual vs classic (`classic-visual-parity`) — font-size, font-weight, color, spacing, Gap, margin, padding, letter spacing, line height, hover, animation
-- `gulp bundle` / `gulp test` pass **≠** visual done
-- **WordPress:** WP-CLI/PHPUnit (ရှိမှ) သို့ Manual
-
----
-
-## Scenario B
-
-- Regression Recheck **အစီရင်ခံ**
-- Fast-Track typo ကျော်နိုင်
-
----
-
-## Security Testing Hook
-
-- Safety ထိ → `00` OWASP Pre-Check ရလဒ်ကို Testing Results / Self-Review Security တွင် တိုတို
-- CI security scan **ရှိမှသာ** မောင်း — မရှိရင် Manual OWASP note
-
----
-
-## E2E Gate (Playwright / Cypress)
-
-Repo တွင် Playwright/Cypress **ရှိပြီး** critical user flow ထိမှ:
-
-- E2E ရေး/ပြင် + မောင်းအစီရင်ခံ
-- **မရှိ** → E2E stack အသစ် User ခွင့်မရဘဲ **မထည့်**
-
-**စံနှုန်း:**
-- ၃–၅ focused tests
-- `data-testid` / semantic selectors
-- success + error paths
-- visual style assert **မလုပ်**
-- `mobile` / non-UI → E2E web Skip
-- Scenario F2/F3 → Testing Gate Skip (ticket/report Testing Considerations သာ)
+- `test`/`lint`/`typecheck`/`build` ကို package.json / pubspec.yaml / pyproject / Makefile / CI မှ ရှာ (သို့ `flutter test`/`dart analyze` / `gulp bundle`·`gulp test` — ဤ repo Heft မသုံး; E2E = `e2e`/`test:e2e`/`playwright test`/`cypress run` ရှိမှ)။
+- ရှိရင် ပြင်ပြီးတိုင်း Terminal မောင်း (သို့ လက်တွေ့အမြန်ဆုံး) → Pass/Fail အစီရင်ခံ။
+- **Auto-Recovery**: Fail → root cause ရှာ → သက်ဆိုင်ရာသာ ပြင် → ပြန်မောင်း။ Self-correct ≤**၂**။ Identical fail ×2 / env·deps·permission·flaky infra / scope ပြင်ပ → retry မလုပ်၊ ချက်ချင်း အစီရင်ခံ။ ၂ ခါ (သို့ ရပ်ပြီး) → Pass/Fail + attempt အနှစ်ချုပ်။ Recovery အတွက် မသက်ဆိုင်ဖိုင် မထိ။
+- မရှိရင် Manual Check (path/action/expected)။ SharePoint Classic/ASPX → browser/site page smoke (script load, list R/W, permission)။ **ဤ repo classic → SPFx UI:** visual vs classic (`classic-visual-parity`) ထည့် — font-size, font-weight, font color, BG color, spacing, Gap, margin, padding, break line, letter spacing, line height, hover effect, animation effect။ `gulp bundle` / `gulp test` pass ≠ visual done။ WordPress → WP-CLI/PHPUnit (ရှိမှ) သို့ Manual (admin save, front render, nonce/cap fail, block/widget editor load)။
+- Scenario **B**: Regression Recheck အစီရင်ခံ။ Fast-Track typo ကျော်နိုင်။
+- **Security Testing Hook**: Safety ထိ → Testing Results / Self-Review Security မှာ `00` OWASP / DevSecOps Pre-Check ရလဒ် တိုတို။ CI security scan ရှိမှသာ မောင်း — မရှိရင် Manual OWASP note (tool အသစ်မထည့်)။
+- **E2E Gate (Playwright / Cypress)**: Playwright (`@playwright/test`, `playwright.config.*`) သို့ Cypress (`cypress`, `cypress.config.*`) **ရှိပြီး** critical user flow (login/checkout/registration/nav/form) ထိမှ → E2E ရေး/ပြင် + မောင်းအစီရင်ခံ။ မရှိ → User ခွင့်မရဘဲ E2E stack မထည့် — Manual Check (သို့ User တောင်းမှ)။ စံနှုန်း: ၃–၅ focused tests, `data-testid`/semantic selectors, success+error, Playwright auto-wait + `page.route`, Cypress hard-wait ရှောင် + `cy.intercept`, visual style assert မလုပ်, TS/JS = repo။ `mobile`/non-UI → E2E web Skip။ Scenario F2/F3 → Testing Gate Skip သို့ ticket/report Testing Considerations သာ။

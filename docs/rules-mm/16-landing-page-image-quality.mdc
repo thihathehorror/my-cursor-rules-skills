@@ -1,49 +1,34 @@
 ---
-description: "[MM] Page image quality — no placeholders, alt, CLS"
+description: "[MM] Page image quality — placeholders မသုံး၊ alt၊ CLS (classic + SPFx UI)"
 alwaysApply: false
+globs:
+  - "DBS-FFW-classicsite/**/*.{aspx,html,css}"
+  - "DBS-FFW-classicsite/**/*"
+  - "DBS-FFW-SPFX/src/**/*.{tsx,scss,css}"
 source: _cursor/rules/16-landing-page-image-quality.mdc
 ---
 
 # Landing / Page Image Quality
 
-User-facing pages / SCSS (images ပါ) edit လုပ်တိုင်း:
+User-facing pages သို့ images ပါသော SCSS ပြင်တိုင်း:
 
----
+## Sources
+- `placehold.co`, `via.placeholder.com`, `dummyimage.com`, `picsum.photos`, သို့ broken hotlinks မသုံး
+- Classic `DBS-FFW-classicsite/**/public/images/` သို့ SPFx `src/webparts/**/assets/` / user-approved URLs prefer
+- Third-party images မတိုင်မီ license confirm
+- Slice မလိုရင် `assets/videos` အောက် large files မ bundle
 
-## Sources (ရင်းမြစ်)
+## Quality & CLS
+- Real product imagery — vague stock filler မသုံး
+- Layout shift ကာကွယ်ရန် explicit `width`/`height` သို့ CSS `aspect-ratio`
+- Optimized sizes prefer; below-fold lazy-load (`loading="lazy"`)
 
-**Placeholder / broken hotlink မသုံး:**
-- `placehold.co`, `via.placeholder.com`, `dummyimage.com`, `picsum.photos`
+## Accessibility
+- Informative images: specific `alt`
+- Decorative: empty `alt`
+- Essential copy ကို image ထဲ only မထား
 
-**Prefer:**
-- classic `DBS-FFW-classicsite/**/public/images/`
-- SPFx `src/webparts/**/assets/`
-- user-approved URLs
-
-- third-party images — license **confirm**
-- `assets/videos` under large files — slice မလိုရ unless bundle **မလုပ်**
-
----
-
-## Quality & CLS (Layout Shift)
-
-- Real product imagery — vague stock filler **မသုံး**
-- Explicit `width`/`height` or CSS `aspect-ratio` — layout shift **ကာကွယ်**
-- optimized sizes prefer
-- below-fold = `loading="lazy"`
-
----
-
-## Accessibility (A11y)
-
-- Informative images: **specific** `alt`
-- Decorative: **empty** `alt=""` (`alt=""`)
-- essential copy image ထဲ **only** မထား
-
----
-
-## Checks (စစ်ဆေးချက်)
-
-- paths resolve in repo (classic images / SPFx bundled assets / property-pane URL)
-- mobile + desktop crop **readable**
-- error/empty states — broken-image icons **မပေါ်**
+## Checks
+- Paths ဤ repo မှာ resolve (classic `DBS-FFW-classicsite/**/public/images/`, SPFx bundled assets, သို့ property-pane URL)
+- Mobile + desktop crop still readable
+- Error/empty states မှာ broken-image icons မပေါ်ရ

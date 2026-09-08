@@ -1,33 +1,20 @@
 ---
-description: "[MM] Node.js / Express backend — express in package.json && !next (archive)"
+description: "[MM] Node.js / Express backend စံနှုန်းများ — package.json တွင် express && !next တွေ့မှ apply (Deduped split)"
+globs:
+  - "**/routes/**/*.{js,ts,mjs,cjs}"
+  - "**/middleware/**/*.{js,ts,mjs,cjs}"
+  - "**/controllers/**/*.{js,ts,mjs,cjs}"
+  - "**/app.{js,ts,mjs,cjs}"
+  - "**/server.{js,ts,mjs,cjs}"
 alwaysApply: false
 source: _cursor/rules/archive/10-nodejs-express-standards.mdc
 status: archived
 ---
 
-# Node.js / Express Backend Standards
+# Node.js / Express (detect: `package.json` တွင် `express` && !`next`)
 
-> **Archive:** DBS-FFW repo တွင် Express backend **မရှိ** — reference ဖတ်ရန် copy သာ။
-
-**Detect:** `express` in `package.json` && !`next`
-
----
-
-## General
-
-**Surface:** `backend`
-
-- Router / middleware ဖွဲ့စည်းပုံ **လိုက်နာ** — စိတ်ကူးယဉ် framework **မထည့်**
-- Input = validate (zod / joi / express-validator — **ရှိပြီးသား**)
-- SQL/NoSQL = **parameterized / ORM** သာ
-- AuthZ = middleware တွင် Identity + Role
-- Cookie session → CSRF / SameSite **သင့်သလို**
-- Errors = centralized handler
-- Secrets = env — **hardcode မလုပ်**
-- Test = `jest` / `vitest` / `mocha` ရှိရင် Testing Gate (`07`) အတိုင်း
-
----
-
-## NestJS Note
-
-NestJS သီးသန့် ဖွဲ့စည်းပုံ တွေ့ရင် Express rules **မသက်ရောက်** — Clarify သို့ Nest pattern **လိုက်**
+- Surface `backend`။ Router/middleware ဖွဲ့စည်းပုံ လိုက်နာ — စိတ်ကူးယဉ် framework မထည့်။
+- Input = validate (zod/joi/express-validator ရှိပြီးသား)။ SQL/NoSQL = parameterized/ORM သာ။
+- AuthZ = middleware တွင် Identity+Role။ Cookie session → CSRF/SameSite သင့်သလို။
+- Errors = centralized handler။ Secrets = env — hardcode မလုပ်။
+- Test = `jest`/`vitest`/`mocha` ရှိရင် Testing Gate (`07`) အတိုင်း။ NestJS သီးသန့် ဖွဲ့စည်းပုံ တွေ့ရင် Express rules မသက်ရောက် — Clarify သို့ Nest pattern လိုက်။
