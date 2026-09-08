@@ -21,6 +21,8 @@ Gold-standard Cursor agent pack — synced from **DBS-FFW** (2026-08-31).
 | `progress.md` | DBS-FFW slice inventory + suggested order |
 | `codegraph.json` | DBS-FFW index excludes (retarget per project) |
 | `docs/migration/` | PARITY · SITEASSETS · SITE_CHROME templates |
+| `docs/rules-mm/` | Myanmar translation of `_cursor/rules/` (docs only) |
+| `docs/skills-mm/` | Myanmar translation of `_cursor/skills/` (docs only — not deploy) |
 
 ## Pins (all classic → SPFx projects)
 
