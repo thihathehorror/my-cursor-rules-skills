@@ -1,39 +1,39 @@
 # Upgrade SPFx Project
 
-## Ensure CLI for Microsoft 365 is installed
+## CLI for Microsoft 365 ရှိကြောင်း စစ်
 
-Run `m365 version` to check if CLI for Microsoft 365 is installed. If the command fails (not found), install it globally:
+`m365 version` မောင်း။ Command fail (not found) ရင် globally install:
 
 ```
 npm install -g @pnp/cli-microsoft365@latest --silent --no-fund --no-audit
 ```
 
-## Before you start
+## မစမီ
 
-1. **Ensure a clean, committed git state.** The upgrade rewrites many files; the user needs a clean baseline to review the diff and roll back. If the working tree is dirty, ask the user to commit or stash first.
-2. **Detect the current version.** Read `.yo-rc.json` (`@microsoft/generator-sharepoint.version`) and the `@microsoft/sp-*` versions in `package.json`. State the current and target versions before running anything.
-3. **Check Node/TypeScript compatibility for the target version.** Each SPFx version supports specific Node ranges. If the installed Node is outside the target's range the build will fail — surface this up front (use `m365 spfx doctor` if unsure).
+1. **Git state သန့် + committed။** Upgrade က ဖိုင်များစွာ ပြန်ရေး; user က diff ကြည့် / roll back ရန် baseline လို။ Working tree dirty ရင် commit သို့ stash အရင်တောင်း။
+2. **လက်ရှိ version ရှာ။** `.yo-rc.json` (`@microsoft/generator-sharepoint.version`) နှင့် `package.json` ထဲ `@microsoft/sp-*` ဖတ်။ ဘာမှ မမောင်းမီ current + target versions ကြေညာ။
+3. **Target version အတွက် Node/TypeScript compatibility စစ်။** SPFx version တိုင်း Node range သီးခြား။ Installed Node က target range ပြင်ပဆို build fail — အရင်ပြ (`မသေချာရင် m365 spfx doctor`)။
 
-## Run the upgrade
+## Upgrade မောင်း
 
-From the SPFx project root, run CLI for Microsoft 365:
+SPFx project root မှ CLI for Microsoft 365:
 
-- If the user specified a target version:
+- User က target version ပေးရင်:
   ```
   m365 spfx project upgrade --toVersion <version> --output md
   ```
-- If no version specified (upgrade to latest supported):
+- Version မပေးရင် (latest supported):
   ```
   m365 spfx project upgrade --output md
   ```
 
-## Apply the upgrade
+## Upgrade apply
 
-Read the generated report and apply **all** steps in the order listed. The report contains file modifications, package version changes, and configuration updates. Apply them sequentially — order matters. If a step targets a customized file, merge carefully rather than overwriting custom logic.
+Generated report ဖတ်ပြီး စာရင်းအစဉ်အတိုင်း steps **အားလုံး** apply။ Report = file modifications, package version changes, configuration updates။ Sequential — order အရေးကြီး။ Step က customized ဖိုင်ပစ်မှတ်ထားရင် overwrite မဟုတ် merge သတိ။
 
 ## Verify
 
-1. Run `npm install --silent --no-fund --no-audit` to update dependencies.
-2. Run `npm run build` and resolve every error — the upgrade is not complete until the build is clean.
-3. Fix any **deprecated or removed APIs** flagged as build errors.
-4. Tell the user to serve the project (`heft start` on v1.22+, `gulp serve` on legacy), smoke-test in the workbench, and review the git diff before committing.
+1. Dependencies ပြင်ရန် `npm install --silent --no-fund --no-audit`။
+2. `npm run build` မောင်း — error တိုင်း ပြင်; build သန့်မှ upgrade ပြီး။
+3. Build errors အဖြစ် ပေါ်သော **deprecated / removed APIs** ပြင်။
+4. User ကို serve ခိုင်း (`heft start` on v1.22+, `gulp serve` on legacy), workbench smoke-test, commit မတိုင်မီ git diff ကြည့်ခိုင်း။

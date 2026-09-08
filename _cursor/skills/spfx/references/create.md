@@ -1,8 +1,8 @@
 # Create SPFx Project
 
-## Ensure CLI for Microsoft 365 is installed
+## CLI for Microsoft 365 ရှိကြောင်း စစ်
 
-Run `m365 version` to check if CLI for Microsoft 365 is installed. If the command fails (not found), install it globally:
+`m365 version` မောင်း။ Command fail (not found) ရင် globally install:
 
 ```
 npm install -g @pnp/cli-microsoft365@latest --silent --no-fund --no-audit
@@ -10,7 +10,7 @@ npm install -g @pnp/cli-microsoft365@latest --silent --no-fund --no-audit
 
 ## Environment check
 
-Run `m365 spfx doctor` to verify Node version, npm version, and other prerequisites. If Node is incompatible, check for `fnm` or `nvm` and try to switch to a compatible version. After switching Node versions, re-run `m365 spfx doctor` — each Node version has its own global packages, so previously installed tools (including CLI for Microsoft 365) may not be available. If the doctor reports missing packages (e.g., `yo`, `@microsoft/generator-sharepoint`), install them globally with `npm install -g --silent --no-fund --no-audit`. If no version manager is available, no compatible Node version is installed, or other errors remain that can't be resolved automatically, **stop and tell the user** what needs fixing before proceeding.
+Node / npm / prerequisites အတွက် `m365 spfx doctor`။ Node မကိုက်ရင် `fnm` သို့ `nvm` ရှာပြီး compatible version ပြောင်းကြည့်။ Node ပြောင်းပြီး `m365 spfx doctor` **ပြန်မောင်း** — Node version တိုင်း global packages သီးခြား၊ ရှိပြီး CLI for Microsoft 365 ပျောက်နိုင်။ Doctor က packages ပျောက်ဟု ပြရင် (ဥပမာ `yo`, `@microsoft/generator-sharepoint`) `npm install -g --silent --no-fund --no-audit` ဖြင့် globally install။ Version manager မရှိ၊ compatible Node မရှိ၊ သို့ အလိုအလျောက် မပြင်နိုင်သော errors ကျန်ရင် **ရပ်ပြီး user ကို ဘာပြင်ရမည် ပြော**။
 
 ## Scaffold the project
 
@@ -18,23 +18,23 @@ Run `m365 spfx doctor` to verify Node version, npm version, and other prerequisi
 yo @microsoft/sharepoint --solution-name "<name>" --framework react --component-type webpart --component-name "<WebPartName>" --skip-install --no-insight
 ```
 
-For an **extension**, pass `--extension-type` (omit it for web parts):
+**Extension** အတွက် `--extension-type` ပေး (web parts မှာ ချန်):
 
 ```
 yo @microsoft/sharepoint --solution-name "<name>" --component-type extension --extension-type ApplicationCustomizer --component-name "<Name>" --framework none --skip-install --no-insight
 ```
 
-**Critical: always use non-interactive mode** with explicit flags as shown above. Interactive mode (arrow-key navigation) is unreliable in agent terminals and causes wrong template selection. Adjust flags based on what the user asks for.
+**Critical: အထက် flags ဖြင့် non-interactive mode အမြဲ။** Interactive mode (arrow-key) က agent terminals မှာ မယုံကြည်ရ၊ template မှားရွေး။ User တောင်းသည့်အတိုင်း flags ညှိ။
 
-Only if the user explicitly needs the **legacy gulp** toolchain, opt in via the generator using `--use-gulp`.
+User က **legacy gulp** toolchain အတိအလင်း လိုမှသာ generator `--use-gulp`။
 
 ## Install dependencies
 
-From the generated project directory, run `npm install --silent --no-fund --no-audit`.
+Generated project directory မှ `npm install --silent --no-fund --no-audit`။
 
-## Packaging (when the user wants to deploy)
+## Packaging (user deploy လိုမှ)
 
-Produce the deployable `.sppkg` in `sharepoint/solution` using the project's toolchain:
+`sharepoint/solution` ထဲ deployable `.sppkg` — ပရောဂျက် toolchain:
 
-- Heft (v1.22+): `heft build --production` then `heft package-solution --production`
-- gulp (≤ v1.21.1): `gulp bundle --ship` then `gulp package-solution --ship`
+- Heft (v1.22+): `heft build --production` ပြီး `heft package-solution --production`
+- gulp (≤ v1.21.1): `gulp bundle --ship` ပြီး `gulp package-solution --ship`

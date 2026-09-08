@@ -2,32 +2,32 @@
 
 (Fluent UI v9 + SharePoint + Host Awareness)
 
-**This repo exception (wins over every MUST below):** DBS-FFW-classicsite → SPFx page UI is a **visual clone**. Load `classic-visual-parity`. Do **not** apply Fluent v9, host-theme colors, or “MUST NOT hardcode colors” to those pages. Project pin = Fluent **v8** + classic `style.css` / `sass/` values. Custom HTML/CSS matching classic is required. This file’s Fluent-default rules apply only to generic SPFx UI that is **not** a classic clone.
+**ဤ repo ခြွင်းချက် (အောက် MUST တိုင်းကို နိုင်):** DBS-FFW-classicsite → SPFx page UI = **visual clone**။ `classic-visual-parity` load။ ထို pages မှာ Fluent v9, host-theme colors, “MUST NOT hardcode colors” **မသုံး**။ Project pin = Fluent **v8** + classic `style.css` / `sass/` values။ Classic ကိုက် custom HTML/CSS required။ ဤဖိုင်၏ Fluent-default rules = classic clone **မဟုတ်**သော generic SPFx UI သာ။
 
-Normative guidance for generating UI consistent with Fluent UI v9, aligned to SharePoint experiences, and adaptable across host environments.
+Fluent UI v9 နဲ့ ကိုက်ညီ၊ SharePoint experiences နဲ့ ညှိ၊ host environments ကြား လိုက်လျောသော UI ထုတ်ရန် normative guidance။
 
 ## 1. Scope
 
-Applies to UI generated as:
+ထုတ်သော UI အမျိုးအစား:
 
 - primitive (button, input, badge)
 - composite (toolbar, card, feed item)
 - assembly (feed, dashboard section, form)
-- template (full page or multi-region flow)
+- template (full page သို့ multi-region flow)
 
-Agents MUST NOT assume all requests are full-page experiences.
+Agents က request တိုင်း full-page experience ဟု **မယူဆရ**။
 
-### Classic clone (this repo) — skip Fluent visual rules
+### Classic clone (ဤ repo) — Fluent visual rules ကျော်
 
-If the task is a DBS-FFW-classicsite classic page / chrome UI:
+Task = DBS-FFW-classicsite classic page / chrome UI ဆို:
 
-- **Do not apply** sections 2–6, 8, 12 (Fluent v9, host theme, no hardcoded colors, Fluent defaults).
-- **Do apply** section 10 a11y (keyboard, focus, names) without changing classic type, color, spacing, hover, or animation.
-- Recreating classic markup in custom HTML/CSS is required — the “MUST NOT recreate Fluent with custom HTML/CSS” rule does **not** apply.
+- Sections 2–6, 8, 12 (Fluent v9, host theme, no hardcoded colors, Fluent defaults) **မသုံး**။
+- Section 10 a11y (keyboard, focus, names) **သုံး** — classic type, color, spacing, hover, animation **မပြောင်း**။
+- Classic markup ကို custom HTML/CSS ပြန်ဖန် **လိုအပ်** — “MUST NOT recreate Fluent with custom HTML/CSS” ဤနေရာ **မသက်ရောက်**။
 
 ## 2. Platform
 
-Generated UI MUST use:
+Generated UI MUST သုံး:
 
 - React
 - TypeScript
@@ -35,131 +35,131 @@ Generated UI MUST use:
 - @fluentui/react-components
 - @fluentui/react-icons
 
-Agents MUST NOT recreate Fluent components using custom HTML/CSS.
+Agents MUST NOT Fluent components ကို custom HTML/CSS ဖြင့် ပြန်ဖန်။
 
-MUST verify the Fluent UI version against the project's `package.json` before importing. Match the version aligned to the installed SPFx; do not assume a version the project does not declare.
+Import မတိုင်မီ ပရောဂျက် `package.json` မှ Fluent UI version အတည်ပြု။ Installed SPFx နဲ့ ကိုက် version သုံး; ပရောဂျက် မကြေညာသော version မယူဆ။
 
 ## 3. Core Rules
 
-- MUST use Fluent UI v9 components when available
-- MUST compose from Fluent primitives before custom UI
-- MUST produce accessible, responsive output
-- SHOULD keep output minimal and implementation-ready
-- MAY add small custom styling when required
+- ရရှိနိုင်လျှင် Fluent UI v9 components MUST သုံး
+- Custom UI မတိုင်မီ Fluent primitives မှ compose MUST
+- Accessible, responsive output MUST
+- Output minimal + implementation-ready SHOULD
+- လိုအပ်မှ small custom styling MAY
 
 ## 4. Theme and Host Precedence
 
-Apply in order:
+အစဉ်:
 
 1. Accessibility and legibility
 2. Host surface integration
 3. SharePoint alignment
 4. Brand expression via tokens
 
-- MUST inherit theme, colors, typography from host
-- MUST NOT hardcode colors or surfaces
-- SHOULD use neutral, adaptive surfaces
+- Host မှ theme, colors, typography inherit MUST
+- Colors သို့ surfaces hardcode MUST NOT
+- Neutral, adaptive surfaces SHOULD
 
 ## 5. Theme Application
 
-Generated UI MUST demonstrate theme integration.
+Generated UI MUST theme integration ပြ။
 
-- MUST use FluentProvider when theming is relevant
-- MUST use theme-aware tokens (no fixed colors)
-- SHOULD accept theme via props or context
-- MUST fallback to Fluent defaults when no host theme exists
+- Theming သက်ဆိုင်ရင် FluentProvider MUST
+- Theme-aware tokens MUST (fixed colors မဟုတ်)
+- Theme ကို props သို့ context မှ လက်ခံ SHOULD
+- Host theme မရှိရင် Fluent defaults fallback MUST
 
 ## 6. SharePoint Alignment
 
-- MUST respect SharePoint themes when present
-- MUST adapt to zones, columns, dynamic width
-- SHOULD use patterns: cards, lists, panels, sections
-- MUST NOT assume app-shell layout unless specified
+- ရှိလျှင် SharePoint themes လေးစား MUST
+- Zones, columns, dynamic width လိုက် MUST
+- Patterns: cards, lists, panels, sections SHOULD
+- Specified မဟုတ်လျှင် app-shell layout မယူဆ MUST NOT
 
 ## 7. Container Context Rules
 
-Agents MUST infer context.
+Agents MUST context ခန့်မှန်း။
 
 ### Inline / Conversational
 
-- MUST use single-column layout
-- MUST prioritize scannability
-- MUST NOT rely on hover-only interactions
-- SHOULD avoid dense toolbars/forms
+- Single-column layout MUST
+- Scannability ဦးစားပေး MUST
+- Hover-only interactions မယုံ MUST NOT
+- Dense toolbars/forms ရှောင် SHOULD
 
 ### Embedded / Web Part
 
-- MUST assume constrained width
-- MUST use compact density
-- MUST minimize padding and elevation
-- SHOULD favor vertical layouts
-- MUST resize cleanly across zones
+- Constrained width ယူဆ MUST
+- Compact density MUST
+- Padding နှင့် elevation လျှော့ MUST
+- Vertical layouts ဦးစားပေး SHOULD
+- Zones ကြား သန့်စင် resize MUST
 
 ### Full Page
 
-- MAY use multi-column layouts
-- MAY introduce stronger hierarchy
+- Multi-column layouts MAY
+- ပိုခိုင် hierarchy MAY
 
 ## 8. Component Composition Rules
 
-- MUST use Fluent subcomponents (e.g. CardHeader)
-- MUST NOT recreate component anatomy manually
-- MUST use proper Text hierarchy (size/weight)
-- MUST avoid arbitrary spacing
+- Fluent subcomponents (ဥပမာ CardHeader) MUST
+- Component anatomy လက်ဖြင့် ပြန်ဖန် MUST NOT
+- Proper Text hierarchy (size/weight) MUST
+- Arbitrary spacing ရှောင် MUST
 
 ## 9. Interaction Consistency
 
-- MUST use consistent interaction states (hover/active/focus)
-- SHOULD use appropriate icon variants (filled vs regular)
-- MUST NOT mix inconsistent icon styles
+- Interaction states တသမတ် (hover/active/focus) MUST
+- Icon variants သင့် (filled vs regular) SHOULD
+- Inconsistent icon styles မရော MUST NOT
 
 ## 10. Accessibility
 
-- MUST use semantic structure
-- MUST support keyboard navigation
-- MUST include labels/accessible names
-- MUST preserve tab order
-- MUST manage focus for overlays
-- MUST expose loading/empty/error states
+- Semantic structure MUST
+- Keyboard navigation MUST
+- Labels/accessible names MUST
+- Tab order ထိန်း MUST
+- Overlays အတွက် focus စီမံ MUST
+- Loading/empty/error states ပြ MUST
 
 ## 11. Performance
 
-- SHOULD favor lightweight composition
-- SHOULD avoid excessive nesting
-- SHOULD avoid heavy components unless justified
+- Lightweight composition SHOULD
+- Excessive nesting ရှောင် SHOULD
+- အကြောင်းမရှိ heavy components ရှောင် SHOULD
 
 ## 12. Styling
 
-- MUST prefer Fluent defaults
-- MUST NOT assume fixed widths
-- MUST maintain readability in narrow views
-- SHOULD use theme tokens
+- Fluent defaults ဦးစားပေး MUST
+- Fixed widths မယူဆ MUST NOT
+- Narrow views မှာ readability ထိန်း MUST
+- Theme tokens SHOULD
 
 ## 13. Anti-Patterns
 
 Agents MUST NOT:
 
-- recreate Fluent components manually
-- assume full-screen layouts in embedded contexts
-- use custom color systems
-- overuse elevation
-- create dense multi-column layouts in narrow spaces
-- rely on hover-only affordances
+- Fluent components လက်ဖြင့် ပြန်ဖန်
+- Embedded contexts မှာ full-screen layouts ယူဆ
+- Custom color systems သုံး
+- Elevation အလွန်အကျွံ
+- ကျဉ်းသော နေရာမှာ dense multi-column layouts
+- Hover-only affordances ယုံ
 
 ## 14. Output
 
-Generated output MUST be:
+Generated output MUST:
 
 - React + TypeScript
 - Fluent UI v9-based
-- readable and implementation-ready
+- Readable နှင့် implementation-ready
 
 ## 15. Data Access
 
-- MUST use **PnPjs by default** for any SharePoint or Microsoft Graph data — see [pnpjs.md](./pnpjs.md).
-- MUST keep data calls in a service or hook, never inside render.
-- MUST expose loading, empty, and error states for all async data.
+- SharePoint သို့ Microsoft Graph data မဆို default **PnPjs** MUST — [pnpjs.md](./pnpjs.md)။
+- Data calls = service သို့ hook — render ထဲ NEVER MUST။
+- Async data တိုင်း loading, empty, error states ပြ MUST။
 
 ## 16. Validation
 
-After UI changes, MUST run `npm run build` and resolve all errors, then smoke-test in the workbench (`heft start` on SPFx v1.22+, `gulp serve` on legacy — see [toolchain.md](./toolchain.md)).
+UI ပြောင်းပြီး `npm run build` MUST မောင်း၊ errors အားလုံး ပြင်၊ ပြီး workbench smoke-test (`heft start` on SPFx v1.22+, `gulp serve` on legacy — [toolchain.md](./toolchain.md))။

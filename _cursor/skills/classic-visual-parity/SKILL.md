@@ -1,58 +1,56 @@
 ---
 name: classic-visual-parity
 description: >-
-  Clone classic-site visual CSS into SPFx module.scss at pixel level: font-size,
-  font-weight, font color, BG color, spacing, Gap, margin, padding, break line,
-  letter spacing, line height, hover effect, animation effect, and responsive
-  @media breakpoints. Use when migrating classic ASPX to SPFx, when the user
-  says the page does not look like the classic site, when font-weight looks light
-  or bold vs classic, menu underline mismatch, or when updating styles,
-  style.css, OpenSans, UIKit, Bootstrap, hover, animation, mobile, tablet, or
-  responsive layout on DBS-FFW-classicsite pages.
+  [MM] Classic-site visual CSS ကို SPFx module.scss ထဲ pixel-level clone:
+  font-size, font-weight, font color, BG, spacing, Gap, margin, padding,
+  break line, letter spacing, line height, hover, animation, @media။
+  Trigger: classic ASPX → SPFx, classic နဲ့ မတူ, font-weight ပါး/ထူ, menu underline,
+  style.css, OpenSans, UIKit, Bootstrap, hover, animation, mobile/tablet,
+  DBS-FFW-classicsite responsive layout.
 ---
 
 # Classic Visual Parity (blocking)
 
-This repo is a **visual clone**, not a Fluent redesign.
+ဤ repo = **visual clone** — Fluent redesign မဟုတ်။
 
-**Visual source of truth** = classic CSS, not Fluent defaults, not SharePoint theme slots, not glassmorphism.
+**Visual source of truth** = classic CSS — Fluent defaults / SharePoint theme slots / glassmorphism မဟုတ်။
 
 | Source | Path |
 |--------|------|
 | Primary CSS | `DBS-FFW-classicsite/2025/style.css` |
 | SASS sources | `DBS-FFW-classicsite/2025/sass/` (`style.sass`, `_home`, `_fonts`) |
-| Page markup | `DBS-FFW-classicsite/2025/*.aspx` (chrome is inline `header.page-banner`) |
-| Vendor layout | `2025/public/css/vendor/uikit.min.css` + Swiper + hamburgers **only classes the page uses** — load `uikit-to-spfx-visual-parity` for `uk-*` leftover |
-| Motion / carousel | Swiper → `swiper-to-spfx-carousel` (init + scoped nav); lottie, anime, FullCalendar (used rules only) |
+| Page markup | `DBS-FFW-classicsite/2025/*.aspx` (chrome = inline `header.page-banner`) |
+| Vendor layout | `2025/public/css/vendor/uikit.min.css` + Swiper + hamburgers **page က သုံးသည့် classes သာ** — `uk-*` leftover အတွက် `uikit-to-spfx-visual-parity` load |
+| Motion / carousel | Swiper → `swiper-to-spfx-carousel` (init + scoped nav); lottie, anime, FullCalendar (သုံးသည့် rules သာ) |
 | Fonts | `DBS-FFW-classicsite/2025/public/Fonts/opensans-condensed/` (OpenSans-Condensed-ExtraBold / Bold / Regular / Light) |
-| Target | `DBS-FFW-SPFX/src/webparts/**/*.module.scss` and `src/shared/**` |
+| Target | `DBS-FFW-SPFX/src/webparts/**/*.module.scss` နှင့် `src/shared/**` |
 
-Do **not** guess rem / Fluent density / theme tokens. Copy classic values.
+rem / Fluent density / theme tokens **မမှန်း**။ Classic values ကူး။
 
-## Conflict overrides (this repo)
+## Conflict overrides (ဤ repo)
 
-These lose to this skill on classic → SPFx UI:
+Classic → SPFx UI မှာ ဤ skill က အောက်ပါတို့ကို နိုင်:
 
-- `spfx-enterprise-design-core` “do not rely on pixel-perfect” / 480–1024 heuristics → **pixel-perfect vs classic is required**; copy classic `@media` px
-- `06-surface-quality` no-px / Fluent breakpoints → **classic `px` / hex / `@media` widths are required**
-- `spfx-theme-and-brand-integration` semantic slots / no hardcoded color → **hardcode classic hex**
-- `spfx/references/react-design.md` Fluent v9 / inherit host theme → **Fluent v8 only if a control is needed; visual values stay classic**
-- glassmorphism / Fluent glass tokens → **do not apply** to DBS-FFW-classicsite page chrome or body UI
-- `07-testing-gate` gulp/list smoke → **not enough**; visual rows above are blocking
+- `spfx-enterprise-design-core` “do not rely on pixel-perfect” / 480–1024 heuristics → **classic နဲ့ pixel-perfect required**; classic `@media` px ကူး
+- `06-surface-quality` no-px / Fluent breakpoints → **classic `px` / hex / `@media` widths required**
+- `spfx-theme-and-brand-integration` semantic slots / no hardcoded color → **classic hex hardcode**
+- `spfx/references/react-design.md` Fluent v9 / inherit host theme → **control လိုမှ Fluent v8; visual values = classic**
+- glassmorphism / Fluent glass tokens → DBS-FFW-classicsite page chrome သို့ body UI မှာ **မသုံး**
+- `07-testing-gate` gulp/list smoke → **မလုံလောက်**; အထက် visual rows = blocking
 
-Keep: CSS modules (no global chrome leaks except documented host-gap paints), keyboard/focus names, `prefers-reduced-motion` wrapping of classic animation (do not drop the effect for users without reduced-motion).
+ထား: CSS modules (documented host-gap paints မှလွဲ global chrome မယို), keyboard/focus names, classic animation ကို `prefers-reduced-motion` wrap (reduced-motion မဟုတ်သူများအတွက် effect **မဖြုတ်**)။
 
-## When (always on these tasks)
+## When (ဤ tasks မှာ အမြဲ)
 
-- Any classic page / web part migrate or visual tweak
-- User mentions: font-size, **font-weight**, font color, BG color, spacing, Gap, margin, padding, break line, letter spacing, line height, hover effect, animation effect, responsive, @media, mobile, tablet, breakpoint, **ထူ**, **ပါး**, **bold**, **underline**, OpenSans
+- Classic page / web part migrate သို့ visual tweak မဆို
+- User ပြော: font-size, **font-weight**, font color, BG color, spacing, Gap, margin, padding, break line, letter spacing, line height, hover effect, animation effect, responsive, @media, mobile, tablet, breakpoint, **ထူ**, **ပါး**, **bold**, **underline**, OpenSans
 - “classic နဲ့ မတူ” / look & feel / spacing mismatch / mobile မတူ
 
-## Workflow (do this before calling the page done)
+## Workflow (page ပြီးဟု မကြေညာမီ)
 
-### 1) CSS inventory (code before SCSS)
+### 1) CSS inventory (SCSS မတိုင်မီ ကုဒ်)
 
-For the slice being edited, read classic `style.css` + matching `sass/` partials + ASPX classes + UIKit/Bootstrap classes actually used. Build a token table. Every row below is **mandatory** — skip none:
+ပြင်နေသော slice အတွက် classic `style.css` + ကိုက်ညီ `sass/` partials + ASPX classes + သုံးသည့် UIKit/Bootstrap classes ဖတ်။ Token table ဆောက်။ အောက် rows **မဖြစ်မနေ** — ကျော်မရ:
 
 - font-size
 - font-weight
@@ -67,61 +65,61 @@ For the slice being edited, read classic `style.css` + matching `sass/` partials
 - line height
 - hover effect
 - animation effect
-- responsive / @media (every classic query that applies to the slice — copy the same `max-width` px; this repo uses 1200, 1024, 959, 768, 640, 480)
+- responsive / @media (slice သက်ရောက်သည့် classic query တိုင်း — `max-width` px တူကူး; ဤ repo = 1200, 1024, 959, 768, 640, 480)
 
-Also capture: `font-family` (year-correct OpenSans named faces — see [visual-typography.md](../classic-to-spfx-migration/references/visual-typography.md)), `border` / `border-radius`, `box-shadow`, `background-image` / gradient, Swiper/hamburgers and UIKit `uk-*` the ASPX actually uses.
+ထပ်ဖမ်း: `font-family` (year-correct OpenSans named faces — [visual-typography.md](../classic-to-spfx-migration/references/visual-typography.md)), `border` / `border-radius`, `box-shadow`, `background-image` / gradient, ASPX က သုံးသည့် Swiper/hamburgers နှင့် UIKit `uk-*`။
 
-Do **not** substitute Fluent 480 / 1024 heuristics. Do **not** collapse several classic breakpoints into one.
+Fluent 480 / 1024 heuristics **မအစား**။ Classic breakpoints အများကြီးကို တစ်ခုတည်း **မပေါင်း**။
 
-Controller JS that toggles classes (active tab, hover class, uk-active) must keep the **same class semantics** so CSS still applies.
+Class toggle လုပ်သော controller JS (active tab, hover class, uk-active) = **class semantics တူ** ထားမှ CSS သက်ရောက်ဆက်ရှိ။
 
 ### 2) Port exact values
 
-- Write into `*.module.scss`. Do not add Tailwind / SPA routers.
-- Reuse existing OpenSans-Condensed `@font-face` (classic `DBS-FFW-classicsite/2025/public/Fonts/opensans-condensed/`). Do not invent a second font stack (`Segoe UI` only as fallback after OpenSans-Condensed).
-- Prefer a shared tokens partial if one already exists under `DBS-FFW-SPFX/src/shared/`. Do **not** create a new package. Duplicate `@font-face` per web part only if no shared partial exists yet.
-- `:global` host paints (`#FFFFFF` on canvas) only when classic `body`/`html` background must fill Modern chrome gaps — do not restyle suite nav / command bar.
-- `br` / `white-space` / empty paragraph spacing: preserve classic break line behavior; do not collapse to Fluent Text spacing.
-- Hover / animation: port `:hover`, `transition`, `@keyframes`, UIKit hover classes. Do not replace with Fluent hover-only-avoidance by removing hover.
-- Responsive: port each matching `@media screen and (max-width: Npx)` (and `min-width` if classic has it) with the **same N**. Inside those queries, clone the same stack / wrap / hide / width / font-size / spacing changes. Host canvas may be narrower than classic full page — still use classic queries; do not invent extra breakpoints to “fix” Modern chrome.
+- `*.module.scss` ထဲရေး။ Tailwind / SPA routers မထည့်။
+- ရှိပြီး OpenSans-Condensed `@font-face` ပြန်သုံး (classic `DBS-FFW-classicsite/2025/public/Fonts/opensans-condensed/`)။ ဒုတိယ font stack မတီထွင် (`Segoe UI` = OpenSans-Condensed နောက် fallback သာ)။
+- `DBS-FFW-SPFX/src/shared/` မှာ shared tokens partial ရှိရင် ပြန်သုံး။ Package အသစ် **မဖန်**။ Shared partial မရှိမှသာ web part တိုင်း `@font-face` duplicate။
+- `:global` host paints (`#FFFFFF` on canvas) = classic `body`/`html` background က Modern chrome gaps ဖြည့်မှသာ — suite nav / command bar **မပြန် style**။
+- `br` / `white-space` / empty paragraph spacing: classic break line ထိန်း; Fluent Text spacing သို့ **မပေါင်း**။
+- Hover / animation: `:hover`, `transition`, `@keyframes`, UIKit hover classes ပို့။ Hover ဖြုတ်ပြီး Fluent hover-only-avoidance **မလုပ်**။
+- Responsive: ကိုက်ညီ `@media screen and (max-width: Npx)` (classic မှာ `min-width` ရှိရင်ပါ) **N တူ** ပို့။ Query အတွင်း stack / wrap / hide / width / font-size / spacing ပြောင်းလဲမှု တူကူး။ Host canvas က classic full page ထက် ကျဉ်းနိုင် — classic queries ဆက်သုံး; Modern chrome “ပြင်” ရန် extra breakpoints မတီထွင်။
 
-### 2b) Typography self-check (blocking — before parity PASS)
+### 2b) Typography self-check (blocking — parity PASS မတိုင်မီ)
 
-**Read** [visual-typography.md](../classic-to-spfx-migration/references/visual-typography.md) and run the mandatory self-check on every UI slice:
+[visual-typography.md](../classic-to-spfx-migration/references/visual-typography.md) **ဖတ်**ပြီး UI slice တိုင်း mandatory self-check:
 
-1. Grep classic `font-family` / `font-weight` / menu `text-decoration` vs `*.module.scss`
-2. Apply named-face rule: `OpenSans-Bold` / SemiBold / Condensed-Bold → **`font-weight: 400`**
-3. Menu/nav `<a>`: `text-decoration: none` where classic has no underline (SharePoint host)
-4. Output short **Typography self-check** table (selector · family · weight · link deco · OK/FIX)
+1. Classic `font-family` / `font-weight` / menu `text-decoration` vs `*.module.scss` Grep
+2. Named-face rule: `OpenSans-Bold` / SemiBold / Condensed-Bold → **`font-weight: 400`**
+3. Menu/nav `<a>`: classic မှာ underline မရှိရင် `text-decoration: none` (SharePoint host)
+4. တိုတောင်း **Typography self-check** table ထုတ် (selector · family · weight · link deco · OK/FIX)
 
-Do **not** mark parity PASS or close a visual typography task without this table.
+ဤ table မရှိဘဲ parity PASS / visual typography task ပိတ် **မလုပ်**။
 
 ### 3) Blocking gate
 
-A migrate or visual update is **not done** if any inventory row still differs from classic (wrong value, missing hover, missing animation, Fluent gap substituted, missing/wrong `@media` width, Fluent 480px used instead of classic).
+Inventory row တစ်ခုခု classic နဲ့ ကွာနေသေးရင် (value မှား, hover ပျောက်, animation ပျောက်, Fluent gap အစားထိုး, `@media` width မှား/ပျောက်, classic အစား Fluent 480px) migrate သို့ visual update **မပြီး**။
 
-Do not say “looks close” / “Fluent-aligned is enough” / “desktop is fine, mobile later”.
+“looks close” / “Fluent-aligned is enough” / “desktop is fine, mobile later” **မပြော**။
 
 ## Validation (manual smoke — visual)
 
-Side-by-side classic page vs SPFx workbench/served page, same breakpoint:
+Classic page vs SPFx workbench/served page ဘေးချင်း၊ breakpoint တူ:
 
 1. font-size, font-weight, font color, BG color
 2. spacing, Gap, margin, padding, break line
 3. letter spacing, line height
 4. hover effect, animation effect
-5. **Responsive (blocking):** every classic `@media` for the slice — same breakpoint px; stack / wrap / hide / width match. Spot-check at those classic widths, not only 480px.
+5. **Responsive (blocking):** slice ၏ classic `@media` တိုင်း — breakpoint px တူ; stack / wrap / hide / width ကိုက်။ Classic widths မှာ spot-check — 480px သာ မဟုတ်။
 
-Then still run Testing Gate (`gulp bundle` / existing tests) and keyboard/focus on controls.
+ပြီးမှ Testing Gate (`gulp bundle` / ရှိပြီး tests) + controls keyboard/focus။
 
 ## Anti-patterns
 
-- Finishing a web part with data/React done but SCSS still Fluent defaults
-- Skipping typography self-check when classic Bold/SemiBold selectors lack `font-weight: 400` in SPFx
-- Copying classic CSS for menu links but leaving SharePoint host underline on `<a>`
-- Replacing classic hex with `[theme:..., default: ...]` or CSS variables from glassmorphism
-- Changing classic px to rem “for a11y” on this clone (user asked for classic match)
-- Applying glassmorphism / Fluent glass tokens to these pages
-- Copying all of `uikit.min.css` into SPFx — only the classes the page uses, inlined into the module
-- Replacing classic `@media` widths with Fluent 480 / 1024 heuristics
-- Shipping desktop-only SCSS and deferring mobile
+- Data/React ပြီးသော် SCSS Fluent defaults ဆက်ရှိ WP ကို ပြီးဟု သတ်
+- Classic Bold/SemiBold selectors မှာ SPFx `font-weight: 400` မရှိဘဲ typography self-check ကျော်
+- Menu links classic CSS ကူးပြီး SharePoint host underline `<a>` မှာ ကျန်
+- Classic hex ကို `[theme:..., default: ...]` သို့ glassmorphism CSS variables အစား
+- ဤ clone မှာ a11y အတွက် classic px → rem (user က classic match တောင်း)
+- ဤ pages မှာ glassmorphism / Fluent glass tokens
+- `uikit.min.css` အားလုံး SPFx ထဲ ကူး — page သုံးသည့် classes သာ module ထဲ inline
+- Classic `@media` widths ကို Fluent 480 / 1024 heuristics အစား
+- Desktop-only SCSS ပို့ပြီး mobile နောက်မှ

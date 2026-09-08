@@ -1,73 +1,72 @@
 ---
 name: swiper-to-spfx-carousel
 description: >-
-  Wires classic Swiper carousels (winner-slider, gallery-slider) into SPFx React
-  17 with classic config parity, scoped navigation, and module.scss nav styles —
-  not vendor CSS bundles. Use when the user mentions Swiper, carousel, slider,
-  gallery slider, winner-slider, swiper-button, slidesPerView, or gallery/winner
-  section does not swipe on SPFx.
+  [MM] Classic Swiper carousels (winner-slider, gallery-slider) ကို SPFx React 17
+  ထဲ classic config parity, scoped navigation, module.scss nav styles ဖြင့် wire —
+  vendor CSS bundles မဟုတ်။ Trigger: Swiper, carousel, slider, gallery slider,
+  winner-slider, swiper-button, slidesPerView, SPFx မှာ gallery/winner swipe မရ။
 ---
 
 # Swiper → SPFx carousel (DBS-FFW)
 
-Classic pages use **Swiper bundle** (`swiper-bundle.min.js` + CSS) with init in `public/js/common.js`. SPFx must **not** ship the vendor bundle — wire `swiper` npm (user-approved) + clone nav/slide CSS from year `style.css` into `*.module.scss`.
+Classic pages = **Swiper bundle** (`swiper-bundle.min.js` + CSS) + `public/js/common.js` init။ SPFx က vendor bundle **မပို့** — user-approved `swiper` npm + year `style.css` မှ nav/slide CSS ကို `*.module.scss` ထဲ clone။
 
-Load with `classic-visual-parity` (nav button / slide visuals) and `uikit-to-spfx-visual-parity` when gallery grid spacing drifts.
+Nav button / slide visuals အတွက် `classic-visual-parity` တွဲ load။ Gallery grid spacing drift ရင် `uikit-to-spfx-visual-parity`။
 
 | Role | Path |
 |------|------|
 | Init configs | `DBS-FFW-classicsite/{year}/public/js/common.js` |
 | Nav / slide CSS | `DBS-FFW-classicsite/{year}/style.css` (+ `sass/_home.sass`) |
 | Markup | slice ASPX — `.winner-slider`, `.gallery-wrap.gallery-slider` |
-| Vendor (reference only) | `{year}/public/css/vendor/swiper-bundle.min.css` — **do not import into SPFx** |
+| Vendor (reference only) | `{year}/public/css/vendor/swiper-bundle.min.css` — SPFx ထဲ **မimport** |
 | Target | `DBS-FFW-SPFX/src/webparts/**` |
 
-Classic configs (all years — verify slice before copy): see [classic-configs.md](./references/classic-configs.md).
+Classic configs (years အားလုံး — ကူးမီ slice အတည်ပြု): [classic-configs.md](./references/classic-configs.md)။
 
 ## When
 
-- Gallery or game-show winner section shows static slides on SPFx
-- User mentions Swiper, carousel, slider, `swiper-button`, `slidesPerView`
-- Wave 4 parity on sections with `.winner-slider` / `.gallery-slider`
+- SPFx မှာ gallery သို့ game-show winner section slides static
+- User က Swiper, carousel, slider, `swiper-button`, `slidesPerView` ပြော
+- `.winner-slider` / `.gallery-slider` ရှိသော sections ၏ Wave 4 parity
 
 ## Reject
 
-- `swiper-bundle.min.js` / `swiper-bundle.min.css` in sppkg
-- `import 'swiper/css/bundle'` (pulls all module CSS — bloat + fights classic overrides)
-- Global `navigation.nextEl: '.swiper-button-next'` when multiple sliders exist on one page (classic pattern — **scope per instance** in SPFx)
-- Fluent carousel / `@fluentui/react` replacements for visual clone slices
-- `npm i swiper` without user approval (`00` Dependencies)
-- Parity PASS while slides do not swipe or breakpoints differ from classic
+- sppkg ထဲ `swiper-bundle.min.js` / `swiper-bundle.min.css`
+- `import 'swiper/css/bundle'` (module CSS အားလုံး — bloat + classic overrides နဲ့ တိုက်)
+- စာမျက်နှာမှာ sliders အများရှိရင် global `navigation.nextEl: '.swiper-button-next'` (classic pattern — SPFx မှာ **instance တိုင်း scope**)
+- Visual clone slices အတွက် Fluent carousel / `@fluentui/react` အစား
+- User approval မရှိ `npm i swiper` (`00` Dependencies)
+- Slides swipe မရ သို့ breakpoints classic နဲ့ ကွာနေရင် parity PASS
 
 ## Workflow
 
 ### 1) Inventory slice
 
-From ASPX + `common.js`:
+ASPX + `common.js` မှ:
 
-- Which sliders? (`.winner-slider`, `.gallery-slider`, `.mySwiper1`, …)
-- Init options per selector (navigation, `slidesPerView`, `spaceBetween`, `breakpoints`, `loop`, …)
-- Nav buttons present in markup? (`swiper-button-prev` / `swiper-button-next` inside container)
-- Dynamic slide injection? (e.g. `testController.js` mutates `.winner-slider .swiper-wrapper` — mirror in React state)
+- ဘယ် sliders? (`.winner-slider`, `.gallery-slider`, `.mySwiper1`, …)
+- Selector တိုင်း init options (navigation, `slidesPerView`, `spaceBetween`, `breakpoints`, `loop`, …)
+- Markup မှာ nav buttons ရှိသလား? (container ထဲ `swiper-button-prev` / `swiper-button-next`)
+- Dynamic slide injection? (ဥပမာ `testController.js` က `.winner-slider .swiper-wrapper` mutate — React state မှာ ပြန်ထုတ်)
 
-SPFx stubs today (verify): `GallerySection.tsx`, `GameShowWinnersSection.tsx` — markup only, **no init**, **no nav buttons**.
+SPFx stubs ယနေ့ (အတည်ပြု): `GallerySection.tsx`, `GameShowWinnersSection.tsx` — markup သာ၊ **init မရှိ**, **nav buttons မရှိ**။
 
 ### 2) Dependency (ask-first)
 
-If approved:
+ခွင့်ရရင်:
 
 ```bash
 cd DBS-FFW-SPFX
 npm i swiper
 ```
 
-- Prefer current stable `swiper` (12.x) — avoid known vulnerable 8.x transitive pins
-- React 17 + SPFx 1.20: use `swiper/react` (`Swiper`, `SwiperSlide`), not Swiper Element web components unless user requests
-- Import **only** needed module CSS, e.g. `swiper/css` + `swiper/css/navigation` — not bundle
+- Current stable `swiper` (12.x) ဦးစားပေး — known vulnerable 8.x transitive pins ရှောင်
+- React 17 + SPFx 1.20: `swiper/react` (`Swiper`, `SwiperSlide`) — user မတောင်းလျှင် Swiper Element web components မဟုတ်
+- လိုအပ်သော module CSS သာ import — ဥပမာ `swiper/css` + `swiper/css/navigation` — bundle မဟုတ်
 
 ### 3) Shared component pattern
 
-Create one reusable wrapper per web part (or `src/shared/` if multiple WPs need it):
+WP တစ်ခုမှာ reusable wrapper တစ်ခု (WPs အများလိုရင် `src/shared/`):
 
 ```tsx
 import { Navigation } from 'swiper/modules';
@@ -79,49 +78,49 @@ import 'swiper/css/navigation';
 // modules={[Navigation]} navigation onSwiper destroy on unmount (useEffect cleanup)
 ```
 
-**SPFx / bundle size** (MS Learn dynamic loading): optional `import()` of swiper only when the section mounts — same pattern as heavy vendors; do not block baseline on it.
+**SPFx / bundle size** (MS Learn dynamic loading): section mount မှသာ optional `import()` — heavy vendors ပုံစံတူ; baseline ကို ဤအချက်ကြောင့် မပိတ်။
 
-**Scoped navigation** (required when 2+ sliders on page):
+**Scoped navigation** (စာမျက်နှာမှာ sliders ၂+ ရှိရင် required):
 
-- Put `swiper-button-prev` / `swiper-button-next` **inside** each `Swiper` (React creates elements)
-- Or `navigation={{ nextEl: nextRef.current, prevEl: prevRef.current }}` with refs on that instance's buttons
-- Do **not** reuse classic global selectors across instances
+- `swiper-button-prev` / `swiper-button-next` ကို `Swiper` **အတွင်း** ထား (React က elements ဖန်)
+- သို့ `navigation={{ nextEl: nextRef.current, prevEl: prevRef.current }}` — ထို instance ၏ buttons refs
+- Classic global selectors ကို instances ကြား **မပြန်သုံး**
 
 **Lifecycle:**
 
-- `onSwiper` store instance; `useEffect` return → `swiper.destroy(true, true)` on unmount
-- Re-init when slide list length changes (country change repopulating winner slides)
+- `onSwiper` မှာ instance သိမ်း; `useEffect` return → unmount မှာ `swiper.destroy(true, true)`
+- Slide list length ပြောင်းရင် re-init (country ပြောင်းပြီး winner slides ပြန်ဖြည့်)
 
 **A11y** (swiper docs + enterprise):
 
-- `modules={[Navigation, A11y]}` when approved — keyboard + slide labels
-- Informative slide images: `alt` on `<img>`; background-only slides: `aria-label` on slide or decorative `aria-hidden` on purely visual tiles
-- `prefers-reduced-motion`: do not autoplay; classic has no autoplay on these sliders
+- ခွင့်ရရင် `modules={[Navigation, A11y]}` — keyboard + slide labels
+- Informative slide images: `<img>` `alt`; background-only slides: slide `aria-label` သို့ purely visual tiles `aria-hidden`
+- `prefers-reduced-motion`: autoplay မလုပ်; classic မှာ ဤ sliders autoplay မရှိ
 
 ### 4) Port classic options
 
 | Selector | Classic (`common.js`) |
 |----------|------------------------|
-| `.winner-slider` | `navigation` only (default `slidesPerView: 1`) |
+| `.winner-slider` | `navigation` သာ (default `slidesPerView: 1`) |
 | `.gallery-slider` | `slidesPerView: 1`, `spaceBetween: 10`, `breakpoints: { 640: { slidesPerView: 2 }, 768: { slidesPerView: 3 } }` |
 
-Pass as `Swiper` props / `breakpoints` object — numeric keys must match classic (640, 768), not Fluent 480.
+`Swiper` props / `breakpoints` object — numeric keys classic တူ (640, 768), Fluent 480 မဟုတ်။
 
-### 5) CSS (visual parity — not vendor file)
+### 5) CSS (visual parity — vendor ဖိုင်မဟုတ်)
 
-Clone from year `style.css` into the web part module (already partially done in `Ffw2023.module.scss`):
+Year `style.css` မှ web part module ထဲ clone (`Ffw2023.module.scss` မှာ တစ်စိတ်တစ်ပိုင်း ရှိပြီး):
 
 - `.winner-slider .team-photo` / `.gallery-slider` heights (500px winner, 220px gallery tile)
 - Nav: `background-color`, hover flip to white/`#707070`, `padding: 32px`, `:after { font-size: 35px }`, `left: 0` / `right: 0`
 - `.gallery-wrap .swiper-slide { overflow: hidden }`, gallery hover `transform: scale(1.03)`
 
-**Mobile fallback:** some modules include `@media` rules that set `.swiper-wrapper { display:flex; overflow-x:auto; scroll-snap-type:x mandatory }` — keep if classic year CSS has it; Swiper init should still run when JS loads.
+**Mobile fallback:** အချို့ modules မှာ `.swiper-wrapper { display:flex; overflow-x:auto; scroll-snap-type:x mandatory }` `@media` ရှိ — classic year CSS မှာ ရှိရင် ထား; JS load ရင် Swiper init ဆက်မောင်း။
 
-Do **not** rely on Swiper default arrow colors — classic overrides them in page CSS.
+Swiper default arrow colors **မယုံ** — classic က page CSS မှာ override။
 
 ### 6) Markup parity
 
-Match classic structure so ported CSS applies:
+Ported CSS သက်ရောက်အောင် classic structure တူ:
 
 ```html
 <div class="swiper winner-slider">
@@ -131,17 +130,17 @@ Match classic structure so ported CSS applies:
 </div>
 ```
 
-Gallery: `swiper gallery-wrap gallery-slider` (both classes).
+Gallery: `swiper gallery-wrap gallery-slider` (classes နှစ်ခုလုံး)။
 
-### 7) Validation (blocking before parity PASS on slider sections)
+### 7) Validation (slider sections parity PASS မတိုင်မီ blocking)
 
-Manual smoke vs classic at same breakpoint:
+Classic နဲ့ breakpoint တူ manual smoke:
 
-- [ ] Prev/next visible and styled (dark overlay → white hover)
-- [ ] Winner: one slide per view; swipe / arrows work
-- [ ] Gallery: 1 / 2 / 3 columns at mobile / 640+ / 768+ with ~10px gap
-- [ ] No horizontal page jitter; destroy clean on WP unmount (no duplicate listeners)
-- [ ] `gulp bundle` passes after adding dep
+- [ ] Prev/next မြင်ရ + styled (dark overlay → white hover)
+- [ ] Winner: view တစ်ခုမှာ slide တစ်ခု; swipe / arrows အလုပ်လုပ်
+- [ ] Gallery: mobile / 640+ / 768+ မှာ 1 / 2 / 3 columns + ~10px gap
+- [ ] Horizontal page jitter မရှိ; WP unmount မှာ destroy သန့် (duplicate listeners မရှိ)
+- [ ] Dep ထည့်ပြီး `gulp bundle` အောင်
 
 ## Cross-skill
 
@@ -154,7 +153,7 @@ Manual smoke vs classic at same breakpoint:
 
 ## Anti-patterns
 
-- Markup-only `swiper-slide` divs without Swiper init (current Ffw2023 state)
-- Missing nav buttons in JSX while CSS targets `.swiper-button-prev`
-- Copying inline `<script>new Swiper(...)</script>` from ASPX into SPFx
-- jQuery post-init DOM hacks for slides — use React props/state
+- Swiper init မရှိ markup-only `swiper-slide` divs (လက်ရှိ Ffw2023 state)
+- CSS က `.swiper-button-prev` ပစ်မှတ်ထားသော် JSX မှာ nav buttons ပျောက်
+- ASPX ထဲ `<script>new Swiper(...)</script>` ကို SPFx ထဲ ကူး
+- Slides အတွက် jQuery post-init DOM hacks — React props/state သုံး

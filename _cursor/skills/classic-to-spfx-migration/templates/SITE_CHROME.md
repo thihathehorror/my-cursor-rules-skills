@@ -1,8 +1,10 @@
 # Site Pages chrome toggles (DBS-FFW)
 
-Classic pages keep **inline** chrome. Use Site Pages Yes/No columns **only** when a modern host page must hide SharePoint chrome around a full-bleed / SPA web part. Not an Application Customizer. Not required for Visual PASS of the cloned body UI.
+> Docs ဘာသာပြန် — live fill-in = `docs/migration/SITE_CHROME.md`။ Column internal names = English။
 
-## Columns (only if user asks)
+Classic pages က **inline** chrome ထိန်း။ Full-bleed / SPA web part ပတ်လည် SharePoint chrome ဖျောက်ရန် modern host page လိုမှသာ Site Pages Yes/No columns သုံး။ Application Customizer မဟုတ်။ Cloned body UI ၏ Visual PASS အတွက် **မလို**။
+
+## Columns (user တောင်းမှသာ)
 
 Site Pages → **+ Add column** → **Yes/No**:
 
@@ -12,11 +14,11 @@ Site Pages → **+ Add column** → **Yes/No**:
 | Show Footer | `ShowFooter` | Yes |
 | Show Banner | `ShowBanner` | Yes |
 
-Confirm internal names after create. Omit Banner if unused.
+Create ပြီး internal names အတည်ပြု။ မသုံးရင် Banner ချန်။
 
 | Value | Effect |
 |-------|--------|
 | Yes / blank / column missing | Show (fail-open) |
 | No | Hide |
 
-Runtime: `SPHttpClient` on the host page item. Detail: `references/site-chrome.md`.
+Runtime: host page item ပေါ် `SPHttpClient`။ အသေးစိတ်: `references/site-chrome.md`။

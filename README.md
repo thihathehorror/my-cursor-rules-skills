@@ -13,7 +13,7 @@ Gold-standard Cursor agent pack — synced from **DBS-FFW** (2026-08-31).
 | Path | Description |
 |------|-------------|
 | `_cursor/rules/` | 15 active rules (+ 5 archived dead stacks) |
-| `_cursor/skills/` | 17 skills (incl. `swiper-to-spfx-carousel`) |
+| `_cursor/skills/` | 17 skills (Myanmar prose; `name` / paths / Status tokens stay English) |
 | `_cursor/hooks/` | sessionStart + preCompact + stop handoff loop |
 | `_cursor/hooks.json` | Hook event wiring |
 | `_cursor/mcp.json` | Codegraph MCP (`codegraph` + `${workspaceFolder}`) |
@@ -22,7 +22,7 @@ Gold-standard Cursor agent pack — synced from **DBS-FFW** (2026-08-31).
 | `codegraph.json` | DBS-FFW index excludes (retarget per project) |
 | `docs/migration/` | PARITY · SITEASSETS · SITE_CHROME templates |
 | `docs/rules-mm/` | Myanmar translation of `_cursor/rules/` (docs only) |
-| `docs/skills-mm/` | Myanmar translation of `_cursor/skills/` (docs only — not deploy) |
+| `docs/skills-mm/` | Myanmar docs mirror of `_cursor/skills/` (`source:` frontmatter; not a second copy source) |
 
 ## Pins (all classic → SPFx projects)
 

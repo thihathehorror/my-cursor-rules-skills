@@ -1,23 +1,23 @@
 # PnPjs Data Access (default)
 
-**Rule: use PnPjs for every SharePoint and Microsoft Graph data operation in SPFx.** It is the default data-access layer for this skill. Only use raw `SPHttpClient` or `MSGraphClientV3` when the user explicitly requires it, or when a dependency cannot be added to the project.
+**Rule: SPFx မှာ SharePoint နှင့် Microsoft Graph data operation တိုင်း PnPjs သုံး။** ဤ skill ၏ default data-access layer။ User အတိအလင်း တောင်းမှ သို့ ပရောဂျက်ထဲ dependency ထည့်မရမှသာ raw `SPHttpClient` သို့ `MSGraphClientV3`။
 
 ## Install
 
-Install the **latest** PnPjs packages that match the operations you need. Pin to the major version that supports the project's SPFx/TypeScript level (read `package.json` first):
+လိုအပ်သော operations နဲ့ ကိုက် **latest** PnPjs packages။ ပရောဂျက် SPFx/TypeScript level ကိုက် major version pin (`package.json` အရင်ဖတ်):
 
 ```
 npm install @pnp/sp @pnp/graph --save
 ```
 
-- `@pnp/sp` — SharePoint REST (lists, items, files, site, search).
-- `@pnp/graph` — Microsoft Graph (users, groups, mail, calendar, Teams).
+- `@pnp/sp` — SharePoint REST (lists, items, files, site, search)။
+- `@pnp/graph` — Microsoft Graph (users, groups, mail, calendar, Teams)။
 
-Install only the packages you actually use to keep the bundle small.
+Bundle သေးရန် အစစ်သုံး packages သာ install။
 
-## Initialize with SPFx context
+## SPFx context ဖြင့် initialize
 
-Create the PnPjs instance once using the SPFx context so auth, base URL, and telemetry are wired automatically. Do this in `onInit()` and store the instance, rather than re-creating it on every call.
+Auth, base URL, telemetry အလိုအလျောက် ချိတ်ရန် SPFx context ဖြင့် PnPjs instance တစ်ကြိမ်ဖန်။ `onInit()` မှာလုပ်ပြီး instance သိမ်း — call တိုင်း ပြန်ဖန် မလုပ်။
 
 ```typescript
 import { spfi, SPFx as spSPFx } from "@pnp/sp";
@@ -32,11 +32,11 @@ const sp = spfi().using(spSPFx(this.context));
 const graph = graphfi().using(graphSPFx(this.context));
 ```
 
-For extensions, pass the extension `this.context`. For service-scoped usage, create the instance in a service class and pass the context in.
+Extensions: extension `this.context` ပေး။ Service-scoped: service class ထဲ instance ဖန်ပြီး context ဖြတ်။
 
 ## Selective imports
 
-PnPjs is modular — import only the sub-modules you use so tree-shaking keeps the bundle small. Import the side-effect modules (e.g. `"@pnp/sp/items"`) once where you set up the instance.
+PnPjs = modular — သုံးသည့် sub-modules သာ import၊ tree-shaking က bundle သေးစေ။ Side-effect modules (ဥပမာ `"@pnp/sp/items"`) ကို instance setup နေရာမှာ တစ်ကြိမ် import။
 
 ## Common operations
 
@@ -61,11 +61,11 @@ const me = await graph.me();
 
 ## Permissions for Graph
 
-Microsoft Graph and cross-resource calls require API permissions approved in the **SharePoint admin center → API access**. Declare them in `package-solution.json` under `webApiPermissionRequests`, and tell the user an admin must approve them after deployment.
+Microsoft Graph နှင့် cross-resource calls = **SharePoint admin center → API access** မှာ API permissions approve လို။ `package-solution.json` `webApiPermissionRequests` မှာ ကြေညာ၊ deploy ပြီး admin approve ရမည်ဟု user ကို ပြော။
 
 ## Best practices
 
-- Use `.select()` and `.top()` to limit payload size; never fetch all fields/rows blindly.
-- Handle errors and loading states in the UI; surface failures rather than swallowing them.
-- Keep data logic in a service/helper, not inside React render code.
-- Match the PnPjs major version to the project's SPFx and TypeScript versions to avoid type conflicts.
+- Payload သေးရန် `.select()` နှင့် `.top()` — fields/rows အားလုံး မျက်စိမှိတ် မယူ။
+- UI မှာ errors + loading states ကိုင်; swallow မလုပ်၊ failures ပြ။
+- Data logic = service/helper — React render code ထဲ မထား။
+- Type conflicts ရှောင်ရန် PnPjs major version ကို ပရောဂျက် SPFx + TypeScript နဲ့ ကိုက်။

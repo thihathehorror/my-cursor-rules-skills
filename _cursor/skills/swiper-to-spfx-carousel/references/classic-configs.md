@@ -1,6 +1,6 @@
 # Classic Swiper configs (DBS-FFW)
 
-Source: `public/js/common.js` (2023 / 2024 / 2025 — identical for main sliders).
+Source: `public/js/common.js` (2023 / 2024 / 2025 — main sliders တူ)။
 
 ## `.winner-slider`
 
@@ -14,9 +14,9 @@ new Swiper(".winner-slider", {
 ```
 
 - Default `slidesPerView: 1`
-- No `spaceBetween`, no `loop`, no autoplay
-- Markup: team photos in `.swiper-slide` > `.team-photo` (background-image)
-- Dynamic slides: some controllers replace `.winner-slider .swiper-wrapper` children when country changes — SPFx must re-render slides + call `swiper.update()` or remount
+- `spaceBetween` မရှိ၊ `loop` မရှိ၊ autoplay မရှိ
+- Markup: `.swiper-slide` > `.team-photo` (background-image) ထဲ team photos
+- Dynamic slides: အချို့ controllers က country ပြောင်းရင် `.winner-slider .swiper-wrapper` children အစားထိုး — SPFx က slides ပြန် render + `swiper.update()` သို့ remount
 
 ## `.gallery-slider`
 
@@ -36,12 +36,12 @@ new Swiper(".gallery-slider", {
 ```
 
 - Container classes: `swiper gallery-wrap gallery-slider`
-- Slide content: `.gallery` div with `background-image` (height ~220px in CSS)
-- Gallery hover: `transform: scale(1.03)` — lives in page CSS, not Swiper
+- Slide content: `background-image` ပါ `.gallery` div (CSS မှာ height ~220px)
+- Gallery hover: `transform: scale(1.03)` — page CSS ထဲ၊ Swiper မဟုတ်
 
-## `.mySwiper1` (inline ASPX — not winner/gallery)
+## `.mySwiper1` (inline ASPX — winner/gallery မဟုတ်)
 
-Some pages init separately in ASPX foot script — inventory per slice; often past-events / team carousel only.
+အချို့ pages က ASPX foot script မှာ သီးခြား init — slice တိုင်း inventory; past-events / team carousel သာ မကြာခဏ။
 
 ## React `Swiper` prop mapping
 
@@ -49,13 +49,13 @@ Some pages init separately in ASPX foot script — inventory per slice; often pa
 |---------|----------------|
 | `slidesPerView: 1` | `slidesPerView={1}` |
 | `spaceBetween: 10` | `spaceBetween={10}` |
-| `breakpoints` | same object on `Swiper` |
-| `navigation` | `modules={[Navigation]}` + `navigation` prop or default generated buttons |
-| `modules` | import from `swiper/modules` |
+| `breakpoints` | `Swiper` ပေါ် object တူ |
+| `navigation` | `modules={[Navigation]}` + `navigation` prop သို့ default generated buttons |
+| `modules` | `swiper/modules` မှ import |
 
-## SPFx scoped navigation example
+## SPFx scoped navigation ဥပမာ
 
-When two sliders exist on one page, **do not** use classic global selectors:
+စာမျက်နှာမှာ sliders နှစ်ခုရှိရင် classic global selectors **မသုံး**:
 
 ```tsx
 <Swiper modules={[Navigation]} navigation className="swiper winner-slider">
@@ -64,9 +64,9 @@ When two sliders exist on one page, **do not** use classic global selectors:
 </Swiper>
 ```
 
-Or nest buttons and bind refs — each instance isolated.
+သို့ buttons nest + refs bind — instance တိုင်း သီးခြား။
 
-## CSS selectors to port (check year `style.css`)
+## ပို့ရမည့် CSS selectors (year `style.css` စစ်)
 
 - `.winner-slider .team-photo`, `.gallery-slider .team-photo` — `height: 500px`, cover center
 - `.winner-slider .swiper-button-prev`, `.gallery-slider .swiper-button-prev` — `left: 0`
@@ -75,13 +75,13 @@ Or nest buttons and bind refs — each instance isolated.
 - Hover — `background: #fff`, `color: #707070`, `transition: .3s ease-out`
 - `:after` — `font-size: 35px`
 - `.gallery-wrap .swiper-slide` — `overflow: hidden`
-- Mobile `@media` — optional `scroll-snap` flex fallback on `.swiper-wrapper` (see Ffw2023.module.scss)
+- Mobile `@media` — `.swiper-wrapper` ပေါ် optional `scroll-snap` flex fallback (`Ffw2023.module.scss` ကြည့်)
 
-## Vendor version note
+## Vendor version မှတ်ချက်
 
-Classic ships `swiper-bundle.min.js` (bundled modules). SPFx should import only `Navigation` module + minimal CSS. Match **behavior**, not vendor file shape.
+Classic = `swiper-bundle.min.js` (bundled modules)။ SPFx က `Navigation` module + minimal CSS သာ import။ **Behavior** ကိုက် — vendor file shape မဟုတ်။
 
 ## Security / deps
 
-- Do not commit vulnerable Swiper 8.x — user-approved `swiper@12+` if adding dep
-- No user-controlled slide HTML without sanitize — winner prizes may use HTML from JSON; existing `dangerouslySetInnerHTML` paths stay separate from slide images
+- Vulnerable Swiper 8.x **မcommit** — dep ထည့်ရင် user-approved `swiper@12+`
+- Sanitize မပါ user-controlled slide HTML မသုံး — winner prizes JSON HTML ရှိနိုင်; ရှိပြီး `dangerouslySetInnerHTML` paths ကို slide images နဲ့ မရော

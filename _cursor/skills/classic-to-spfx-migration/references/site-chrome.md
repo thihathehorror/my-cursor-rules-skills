@@ -1,10 +1,10 @@
 # Site Pages chrome On/Off
 
-This PJ’s classic chrome is **inline per `.aspx`** (no separate header/footer ASPX, no `ui-loader.js`). Do **not** copy dbs-mtj PortalShell Application Customizer or `__OMT_*` globals unless the user asks.
+ဤ PJ ၏ classic chrome = **`.aspx` တိုင်း inline** (header/footer ASPX သီးခြားမရှိ၊ `ui-loader.js` မရှိ)။ User မတောင်းလျှင် dbs-mtj PortalShell Application Customizer / `__OMT_*` globals **မကူး**။
 
-Use Site Pages Yes/No columns only when a **modern host page** must hide SharePoint chrome (header/footer/banner) around a full-bleed or SPA web part.
+Full-bleed သို့ SPA web part ပတ်လည် SharePoint chrome (header/footer/banner) ဖျောက်ရန် **modern host page** လိုမှသာ Site Pages Yes/No columns သုံး။
 
-## Columns (Site Pages library) — only if user asks
+## Columns (Site Pages library) — user တောင်းမှသာ
 
 | Display | Internal name (exact) | Default |
 |---------|----------------------|---------|
@@ -12,26 +12,26 @@ Use Site Pages Yes/No columns only when a **modern host page** must hide SharePo
 | Show Footer | `ShowFooter` | Yes |
 | Show Banner | `ShowBanner` | Yes |
 
-- Add as **Yes/No**. Confirm internal names (no spaces).
-- Omit a column if that surface does not exist.
+- **Yes/No** အဖြစ် ထည့်။ Internal names အတည်ပြု (spaces မရှိ)။
+- ထို surface မရှိရင် column ချန်။
 
 ## Semantics (fail-open)
 
 | Value | Effect |
 |-------|--------|
-| Yes / blank / column missing / REST fail / timeout | **Show** that chrome |
-| Explicit `false` / No only | **Hide** |
+| Yes / blank / column missing / REST fail / timeout | ထို chrome **Show** |
+| Explicit `false` / No သာ | **Hide** |
 
-## Runtime (if columns exist)
+## Runtime (columns ရှိရင်)
 
-1. Web part `onInit` → fetch via **`SPHttpClient`** (host Site Pages item)
-2. Apply hide/show before paint. Fail-open if seed/REST missing
-3. Columns apply to the **host Site Page** item, not in-WP routes
+1. Web part `onInit` → **`SPHttpClient`** ဖြင့် fetch (host Site Pages item)
+2. Paint မတိုင်မီ hide/show။ Seed/REST ပျောက်ရင် fail-open
+3. Columns = **host Site Page** item — in-WP routes မဟုတ်
 
-Do not invent list columns without an explicit user ask.
+User အတိအလင်း မတောင်းဘဲ list columns **မတီထွင်**။
 
-## Smoke (only after columns exist)
+## Smoke (columns ရှိပြီးမှသာ)
 
-1. Defaults Yes → SP chrome visible
-2. `ShowHeader=No` → suite/page header hidden as designed
-3. Missing column → chrome still shows (fail-open)
+1. Defaults Yes → SP chrome မြင်ရ
+2. `ShowHeader=No` → suite/page header ဒီဇိုင်းအတိုင်း ပုန်း
+3. Column ပျောက် → chrome ဆက်မြင် (fail-open)

@@ -1,33 +1,36 @@
 ---
 name: spfx-enterprise-code-and-performance
-description: Coding, performance, and best-practice guidance for SPFx web parts and extensions, including data access (REST, Graph, PnPjs), recommended npm packages, and sample patterns.
+description: >-
+  [MM] SPFx web parts/extensions coding, performance, best-practice —
+  data access (REST, Graph, PnPjs), recommended npm packages, sample patterns။
 ---
 
 # SPFx Enterprise Code & Performance Guidance
 
-Use this skill whenever you are **writing or reviewing SPFx code**, not just UX:
+**SPFx ကုဒ်ရေး သို့ review** သည့်အခါ သုံး — UX သက်သက်မဟုတ်:
 
-- Choosing data access approach (SP REST, Microsoft Graph, PnPjs).
-- Structuring services, hooks, and components.
-- Applying performance best practices (bundle size, network calls, rendering).
-- Selecting commonly accepted npm packages for SPFx.
+- Data access ချဉ်းကပ်ပုံ ရွေး (SP REST, Microsoft Graph, PnPjs)။
+- Services, hooks, components ဖွဲ့စည်း။
+- Performance best practices (bundle size, network calls, rendering)။
+- SPFx အတွက် အများလက်ခံ npm packages ရွေး။
 
-This skill is **code-focused**; pair it with:
-- `spfx-enterprise-design-core` + `spfx-accessibility-and-content-quality` for UX.
-- `spfx-theme-and-brand-integration` + `spfx-css-and-styling-governance` for theming and styling.
+ဤ skill = **code-focused**; တွဲ:
+
+- UX အတွက် `spfx-enterprise-design-core` + `spfx-accessibility-and-content-quality`။
+- Theming/styling အတွက် `spfx-theme-and-brand-integration` + `spfx-css-and-styling-governance`။
 
 ---
 
 ## 1. Overall architectural patterns
 
 1. **Separation of concerns**
-   - Web parts and extensions should be **thin shells**; move logic into:
+   - Web parts/extensions = **thin shells**; logic ရွှေ့:
      - `services/` (data access, domain logic)
      - `components/` (pure React views + small view-model logic)
      - `hooks/` (reusable state/data hooks)
 
 2. **Typed contracts everywhere**
-   - Define interfaces for all external data:
+   - External data တိုင်း interfaces:
 ```ts
 export interface ISiteRiskSummary {
   siteId: string;
@@ -38,8 +41,8 @@ export interface ISiteRiskSummary {
 }
 ```
 
-3. **Avoid static singletons bound to web part instances**
-   - Pass context or service instances via props or React context.
+3. **Web part instances နဲ့ ချည်သော static singletons ရှောင်**
+   - Context သို့ service instances ကို props သို့ React context ဖြင့် ပေး။
 
 ---
 
@@ -47,18 +50,18 @@ export interface ISiteRiskSummary {
 
 ### 2.1 Recommended stack
 
-- **SharePoint REST** or **PnPjs (`@pnp/sp`)** for SharePoint data.
-- **Microsoft Graph** or **PnPjs `@pnp/graph`** for cross-service data.
-- Prefer **PnPjs** for:
-  - Cleaner, fluent APIs.
-  - Built-in support for batching, caching, and error handling.
+- SharePoint data = **SharePoint REST** သို့ **PnPjs (`@pnp/sp`)**။
+- Cross-service data = **Microsoft Graph** သို့ **PnPjs `@pnp/graph`**။
+- **PnPjs** ဦးစားပေး:
+  - Cleaner, fluent APIs။
+  - Batching, caching, error handling built-in။
 
-Install (example):
+Install (ဥပမာ):
 ```bash
 npm install @pnp/sp @pnp/graph @pnp/logging @pnp/common @pnp/odata --save
 ```
 
-Initialize PnPjs once per web part/extension in `onInit`:
+Web part/extension တိုင်း `onInit` မှာ PnPjs တစ်ကြိမ် initialize:
 
 ```ts
 import { sp } from '@pnp/sp';
@@ -103,9 +106,9 @@ export class SiteRiskService {
 ```
 
 Guidelines:
-- Keep REST calls in service classes; **never spread raw REST URLs across components**.
-- Use `select`/`expand` to retrieve only necessary fields.
-- Prefer `top()` + paging over fetching entire lists.
+- REST calls = service classes; **raw REST URLs ကို components ကြား မဖြန့်**။
+- လိုအပ်သော fields သာ `select`/`expand`။
+- List အပြည့် မယူ — `top()` + paging။
 
 ---
 
@@ -113,13 +116,13 @@ Guidelines:
 
 ### 3.1 Bundle size
 
-1. **Use SPFx/SharePoint provided frameworks**
-   - Don’t bundle your own React/Fluent UI when SPFx already provides them.
+1. **SPFx/SharePoint ပေးသော frameworks သုံး**
+   - SPFx က ရှိပြီး React/Fluent UI ကို ကိုယ်ပိုင် bundle မလုပ်။
 
-2. **Avoid large general-purpose libraries**
-   - Prefer small, focused utilities (e.g., `date-fns` over `moment`).
+2. **ကြီးသော general-purpose libraries ရှောင်**
+   - Focused utilities (`moment` အစား `date-fns`)။
 
-3. **Use dynamic imports for heavy, low-frequency features**
+3. **Heavy, low-frequency features = dynamic imports**
 
 ```ts
 const LazyDetailsPanel = React.lazy(() =>
@@ -143,44 +146,44 @@ await execute();
 const [sites, policies] = await Promise.all([sitesPromise, policiesPromise]);
 ```
 
-2. **Caching** frequently used reference data (PnPjs `caching`).
+2. မကြာခဏသုံး reference data **Caching** (PnPjs `caching`)။
 
-3. **Avoid chatty patterns**
-   - No 1 REST call per row; use filter, aggregation, or batched reads.
+3. **Chatty patterns ရှောင်**
+   - Row တိုင်း REST ၁ ခေါ် မလုပ်; filter, aggregation, batched reads။
 
 ### 3.3 Rendering performance
 
-1. Use **React memoization** for heavy child components:
+1. Heavy child components = **React memoization**:
 ```ts
 export const RiskTile = React.memo((props: IRiskTileProps) => {
   // render
 });
 ```
 
-2. Use **windowing/virtualization** for large lists (e.g., `@fluentui/react` `DetailsList` with `onRenderMissingItem` or third-party virtual list control, where appropriate and allowed).
+2. ကြီးသော lists = **windowing/virtualization** (ဥပမာ `@fluentui/react` `DetailsList` + `onRenderMissingItem` သို့ ခွင့်ပြု third-party virtual list)။
 
-3. Avoid heavy computation in `render`; pre-compute in hooks or services.
+3. `render` ထဲ heavy computation ရှောင်; hooks သို့ services မှာ pre-compute။
 
 ---
 
 ## 4. Recommended npm packages (baseline)
 
-When allowed by your governance, consider:
+Governance ခွင့်ရရင် စဉ်းစား:
 
-- **`@pnp/sp`, `@pnp/graph`** – Fluent, typed access to SharePoint and Graph.
-- **`@fluentui/react`** – Microsoft design-system components, already aligned with M365.
-- **`date-fns`** – Lightweight date utilities.
-- **`lodash-es` (cherry-picked)** – Utility helpers; ensure tree-shaken imports (`import debounce from 'lodash-es/debounce'`).
+- **`@pnp/sp`, `@pnp/graph`** – SharePoint နှင့် Graph အတွက် fluent, typed access။
+- **`@fluentui/react`** – Microsoft design-system; M365 နဲ့ ကိုက်။
+- **`date-fns`** – Lightweight date utilities။
+- **`lodash-es` (cherry-picked)** – Helpers; tree-shaken imports (`import debounce from 'lodash-es/debounce'`)။
 
-Avoid:
-- Very large UI frameworks that duplicate Fluent UI.
-- Runtime styling frameworks that don’t align with SPFx theming unless explicitly approved.
+ရှောင်:
+- Fluent UI နဲ့ ထပ်သော ကြီး UI frameworks။
+- SPFx theming နဲ့ မကိုက် runtime styling frameworks — အတိအလင်း ခွင့်မှလွဲ။
 
 ---
 
 ## 5. Error handling & logging
 
-1. Centralize error handling in services:
+1. Services မှာ error handling ဗဟိုပြု:
 ```ts
 public async getData(): Promise<IData[]> {
   try {
@@ -193,20 +196,20 @@ public async getData(): Promise<IData[]> {
 }
 ```
 
-2. UI components **translate errors into friendly messages**; never leak raw error objects.
+2. UI components က errors ကို friendly messages **ပြန်ပြော**; raw error objects **မယို**။
 
-3. For production monitoring, integrate **Application Insights** where allowed.
+3. Production monitoring ခွင့်ရရင် **Application Insights** ပေါင်း။
 
 ---
 
 ## 6. How AI editors should use this skill
 
-When generating or reviewing SPFx code:
+SPFx ကုဒ် ထုတ်/review:
 
-1. **Pick data access style**: Prefer PnPjs for SharePoint/Graph; keep calls in services.
-2. **Enforce typing**: Define interfaces for all external data and props.
-3. **Apply performance patterns**: batching, caching, lazy loading, memoization, tree shaking.
-4. **Recommend safe npm packages**: Refer to the list above and avoid unnecessary heavy dependencies.
-5. **Ensure maintainability**: Thin web part/extension classes, clear services, and reusable hooks/components.
+1. **Data access style ရွေး**: SharePoint/Graph = PnPjs ဦးစားပေး; calls = services။
+2. **Typing အတင်း**: External data နှင့် props တိုင်း interfaces။
+3. **Performance patterns**: batching, caching, lazy loading, memoization, tree shaking။
+4. **Safe npm packages**: အထက်စာရင်း; မလို heavy deps ရှောင်။
+5. **Maintainability**: Thin web part/extension classes, services ရှင်း၊ reusable hooks/components။
 
-Use this alongside the design, theming, and toolchain skills to produce **enterprise-grade SPFx solutions** that are fast, maintainable, and aligned with Microsoft’s guidance.
+Design, theming, toolchain skills တွဲပြီး Microsoft guidance နဲ့ ကိုက် **enterprise-grade SPFx** — မြန်၊ ထိန်းသိမ်းရ၊ ညှိ။

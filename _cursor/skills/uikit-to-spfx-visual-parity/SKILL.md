@@ -1,21 +1,19 @@
 ---
 name: uikit-to-spfx-visual-parity
 description: >-
-  Ports UIKit (uikit.css / uk-* classes) visual values into SPFx module.scss
-  so gap, padding, margin, font-size, and animation are not left behind. Use when
-  migrating DBS-FFW-classicsite UIKit classic pages to SPFx,
-  when spacing or type looks wrong vs classic, or when the user mentions UIKit,
-  uk-grid, uk-margin, uk-modal, uk-sticky, uk-animation, uikit.css, leftover
-  gap/padding/margin/font-size/animation.
+  [MM] UIKit (uikit.css / uk-* classes) visual values ကို SPFx module.scss ထဲ ပို့ —
+  gap, padding, margin, font-size, animation မကျန်စေ။ Trigger: DBS-FFW-classicsite
+  UIKit classic → SPFx, spacing/type classic နဲ့ မှား, UIKit, uk-grid, uk-margin,
+  uk-modal, uk-sticky, uk-animation, leftover gap/padding/margin/font-size/animation.
 ---
 
-# UIKit → SPFx visual parity (this repo)
+# UIKit → SPFx visual parity (ဤ repo)
 
-Classic UIKit pages are **page CSS + UIKit + Bootstrap**. Copying only `style.css` into `*.module.scss` drops everything that lived in `uikit.min.css` / `uikit.min.js` / Bootstrap.
+Classic UIKit pages = **page CSS + UIKit + Bootstrap**။ `style.css` သာ `*.module.scss` ထဲ ကူးရင် `uikit.min.css` / `uikit.min.js` / Bootstrap ထဲရှိသမျှ ကျန်။
 
-Do **not** load the full vendor file into SPFx. Inline **only** the `uk-*` rules the page actually uses.
+Vendor ဖိုင်အပြည့် SPFx ထဲ **မload**။ Page က အစစ်သုံး `uk-*` rules **သာ** inline။
 
-Load with `classic-visual-parity` (paths + mandatory token rows). This skill is the **UIKit leftover layer** those rows often miss.
+`classic-visual-parity` နဲ့တွဲ load (paths + mandatory token rows)။ ဤ skill = ထို rows မကြာခဏ လွတ်သည့် **UIKit leftover layer**။
 
 | Role | Path |
 |------|------|
@@ -23,60 +21,60 @@ Load with `classic-visual-parity` (paths + mandatory token rows). This skill is 
 | UIKit JS | `DBS-FFW-classicsite/2025/public/js/vendor/uikit.min.js` |
 | Markup | `DBS-FFW-classicsite/2025/*.aspx` (inline `header.page-banner`) |
 | Page CSS | `DBS-FFW-classicsite/2025/style.css` + `sass/` |
-| Target | `DBS-FFW-SPFX/src/webparts/**/*.module.scss` and `src/shared/**` |
+| Target | `DBS-FFW-SPFX/src/webparts/**/*.module.scss` နှင့် `src/shared/**` |
 
-## Failure mode (expected)
+## Failure mode (မျှော်လင့်)
 
 | Left behind | Why |
 |---|---|
-| Gap | `uk-grid` / `uk-grid-*` is **not** CSS `gap`. It is negative `margin-left` + child `padding-left` (and row `margin-top`). Guessing `gap: Npx` usually misses container-edge alignment. |
-| Padding | `.uk-modal-body`, `.uk-offcanvas-bar`, `.uk-padding-*` live in UIKit, not page CSS. |
-| Margin | `.uk-margin` / `.uk-margin-*` (often 20px stack on form fields). |
-| Font-size | UIKit sets `html { font-size: 16px }` and many utilities are `rem`. SPFx host root font differs → rem drifts. |
-| **Line-height (headings)** | UIKit sets `h2 { line-height: 1.3 }` (and `h1` 1.2, `h3` 1.4). Page `style.css` often overrides `h2` **font-size** only — live classic title height = UIKit line-height × page font-size. SPFx root `line-height: 28px` makes titles inherit **28px** unless ported. |
-| Animation | `.uk-animation-*` needs `@keyframes` + duration. UIKit JS also animates modal/offcanvas. `transition` alone is not enough. |
+| Gap | `uk-grid` / `uk-grid-*` = CSS `gap` **မဟုတ်**။ Negative `margin-left` + child `padding-left` (row `margin-top`)။ `gap: Npx` ခန့်မှန်းရင် container-edge alignment မကြာခဏ လွတ်။ |
+| Padding | `.uk-modal-body`, `.uk-offcanvas-bar`, `.uk-padding-*` = UIKit ထဲ၊ page CSS မဟုတ်။ |
+| Margin | `.uk-margin` / `.uk-margin-*` (form fields မှာ 20px stack မကြာခဏ)။ |
+| Font-size | UIKit က `html { font-size: 16px }` + utilities အများ `rem`။ SPFx host root font ကွာ → rem drift။ |
+| **Line-height (headings)** | UIKit `h2 { line-height: 1.3 }` (`h1` 1.2, `h3` 1.4)။ Page `style.css` က `h2` **font-size** သာ override မကြာခဏ — live classic title height = UIKit line-height × page font-size။ SPFx root `line-height: 28px` က titles ကို **28px** inherit စေ — မပို့ရင်။ |
+| Animation | `.uk-animation-*` = `@keyframes` + duration။ UIKit JS က modal/offcanvas animate။ `transition` တစ်ခုတည်း မလုံလောက်။ |
 
-Also dropped unless ported: `uk-hidden@*` / `uk-visible@*` (show/hide at UIKit breakpoints), `uk-child-width-*`, `uk-flex*`, `uk-width-*`, `uk-sticky`, `uk-table`.
+မပို့ရင် ကျန်: `uk-hidden@*` / `uk-visible@*` (UIKit breakpoints မှာ show/hide), `uk-child-width-*`, `uk-flex*`, `uk-width-*`, `uk-sticky`, `uk-table`။
 
-CSS Modules hash class names. Putting `uk-grid` on JSX does **nothing** unless the rule is in the module (or `:global`, which is usually the wrong fix).
+CSS Modules က class names hash။ JSX မှာ `uk-grid` ထည့်ရုံ **ဘာမှမဖြစ်** — rule က module ထဲရှိမှ (သို့ `:global` = အများအားဖြင့် မှားသော ပြင်ချက်)။
 
-This site uses (verify in ASPX before porting): `uk-container`, `uk-img`, `uk-grid`, `uk-flex`. Re-read the slice ASPX — do not assume InsightsBank modal/sticky classes.
+ဤ site သုံး (ASPX မှာ အတည်ပြုပြီးမှ ပို့): `uk-container`, `uk-img`, `uk-grid`, `uk-flex`။ Slice ASPX ပြန်ဖတ် — InsightsBank modal/sticky classes **မယူဆ**။
 
 ## When
 
-- Any classic → SPFx UI migrate or visual tweak on this site
-- SPFx clone looks tighter, looser, or static vs classic
-- User mentions leftover **gap, padding, margin, font-size, animation** / UIKit / `uk-*`
+- ဤ site classic → SPFx UI migrate သို့ visual tweak မဆို
+- SPFx clone က classic ထက် တင်း/လျော့/static
+- User က leftover **gap, padding, margin, font-size, animation** / UIKit / `uk-*` ပြော
 
 ## Workflow
 
-### 1) Inventory used `uk-*` only
+### 1) သုံးသည့် `uk-*` သာ inventory
 
-From the slice’s ASPX, list every `uk-*` class and UIKit component attribute (`uk-grid`, `uk-container`, `uk-img`, `uk-flex`). For each, extract the **computed rule** from `DBS-FFW-classicsite/2025/public/css/vendor/uikit.min.css` (do not assume another UIKit version).
+Slice ASPX မှ `uk-*` class တိုင်း + UIKit component attribute (`uk-grid`, `uk-container`, `uk-img`, `uk-flex`) စာရင်း။ တစ်ခုချင်း **computed rule** ကို `DBS-FFW-classicsite/2025/public/css/vendor/uikit.min.css` မှ ထုတ် (အခြား UIKit version မယူဆ)။
 
-Mandatory token rows (skip none) — same list as `classic-visual-parity`:
+Mandatory token rows (ကျော်မရ) — `classic-visual-parity` နဲ့တူ:
 
 - font-size / font-weight / font color / BG color
 - spacing / **Gap** / **margin** / **padding** / break line
 - letter-spacing / line-height
 - hover / **animation** (`:hover`, `transition`, `@keyframes`)
-- responsive `@media` — copy the **same px** as classic/UIKit; this repo uses 1200, 1024, 959, 768, 640, 480. Do not replace with Fluent-only 480/1024
+- responsive `@media` — classic/UIKit **px တူ** ကူး; ဤ repo = 1200, 1024, 959, 768, 640, 480။ Fluent-only 480/1024 **မအစား**
 
-### 2) Port into `*.module.scss`
+### 2) `*.module.scss` ထဲ ပို့
 
-- Write equivalent selectors on the React/CSS-module classes (rename `uk-*` to module classes).
-- Copy **exact px / hex / duration**. Do not convert to rem “for a11y”. Do not use Fluent density or theme slots as the look.
-- Grid: prefer the same negative-margin + child padding model. Use CSS `gap` only after side-by-side proof that edges and gutters match.
-- Animation: port `@keyframes` used by the slice. Wrap with `prefers-reduced-motion` (do not drop the effect for everyone).
-- Responsive: port `uk-hidden@m` / `uk-visible@m` as the same `min-width` / `max-width` px as this UIKit file (`@m` = 960px).
-- Host: SharePoint `ControlZone` padding/margin resets can eat spacing — compensate in the web part root, do not restyle suite nav.
+- React/CSS-module classes ပေါ် equivalent selectors (`uk-*` → module classes ပြောင်းအမည်)။
+- **px / hex / duration တိကျ** ကူး။ a11y အတွက် rem မပြောင်း။ Fluent density / theme slots ကို look **မသုံး**။
+- Grid: negative-margin + child padding မော်ဒယ်တူ ဦးစားပေး။ CSS `gap` = ဘေးချင်း proof ပြီး edges/gutters တူမှ။
+- Animation: slice သုံး `@keyframes` ပို့။ `prefers-reduced-motion` wrap (လူတိုင်းအတွက် effect **မဖြုတ်**)။
+- Responsive: `uk-hidden@m` / `uk-visible@m` = ဤ UIKit ဖိုင်၏ `min-width` / `max-width` px တူ (`@m` = 960px)။
+- Host: SharePoint `ControlZone` padding/margin reset က spacing စားနိုင် — web part root မှာ ပြန်ဖြည့်; suite nav **မပြန် style**။
 
-Typical **UIKit 3** defaults in this repo’s `uikit.css` (re-read the file if it changes):
+ဤ repo `uikit.css` **UIKit 3** defaults (ဖိုင်ပြောင်းရင် ပြန်ဖတ်):
 
 | Class / component | Value in this vendor file |
 |---|---|
 | `html` | `font-size: 16px`; `line-height: 1.5` |
-| **`h2`, `.uk-h2`** | **`line-height: 1.3`** (page CSS may override `font-size` only — still port this) |
+| **`h2`, `.uk-h2`** | **`line-height: 1.3`** (page CSS က `font-size` သာ override နိုင် — ဤတန်ဖိုး ဆက်ပို့) |
 | `h1`, `.uk-h1` | `line-height: 1.2` |
 | `h3`, `.uk-h3` | `line-height: 1.4` |
 | `.uk-grid` | `display: flex; flex-wrap: wrap; margin-left: -30px` + `> * { padding-left: 30px }` |
@@ -89,36 +87,36 @@ Typical **UIKit 3** defaults in this repo’s `uikit.css` (re-read the file if i
 | `.uk-animation-slide-top-small` | `@keyframes` `opacity: 0` + `translateY(-10px)` |
 | `@s` / `@m` / `@l` / `@xl` | 640 / 960 / 1200 / 1600 |
 
-`uk-grid` JS also injects `uk-grid-margin` on wrapped rows. If you skip the JS, you must still reproduce row gap in SCSS. `uk-sticky` / `uk-modal` / `uk-toggle` behavior must be React state + CSS, not a copied `uikit.js`.
+`uk-grid` JS က wrapped rows ပေါ် `uk-grid-margin` ထည့်။ JS ကျော်ရင် row gap ကို SCSS မှာ ဆက်ပြန်ထုတ်ရ။ `uk-sticky` / `uk-modal` / `uk-toggle` = React state + CSS — `uikit.js` **မကူး**။
 
 ### 3) Blocking gate
 
-Not done if any inventory row still differs, if `uk-*` was left as a class name with no module rule, if full `uikit.css` was bundled, or if Fluent `gap`/480px was substituted.
+Inventory row ကွာနေ၊ `uk-*` class name ကျန်ပြီး module rule မရှိ၊ `uikit.css` အပြည့် bundle၊ Fluent `gap`/480px အစားထိုး — **မပြီး**။
 
-**UIKit section titles (`h2` / `.main-title` inside `uk-container`):** port **`line-height: 1.3`** on `h2` unless slice ASPX has no `h2` titles — see [visual-typography.md](../classic-to-spfx-migration/references/visual-typography.md) Step 3b. Do not leave WP root `line-height: 28px` on headings.
+**UIKit section titles (`h2` / `.main-title` inside `uk-container`):** `h2` ပေါ် **`line-height: 1.3`** ပို့ — slice ASPX မှာ `h2` titles မရှိမှလွဲ — [visual-typography.md](../classic-to-spfx-migration/references/visual-typography.md) Step 3b။ Headings ပေါ် WP root `line-height: 28px` **မထား**။
 
-**UIKit body copy (`p` in `.card-wrap` / `uk-container`):** port **`font-weight: 400`** on WP root + `p` when classic uses `OpenSans-Regular` — see visual-typography Step 3c. Do not leave host-inherited light weight on card paragraphs.
+**UIKit body copy (`p` in `.card-wrap` / `uk-container`):** classic က `OpenSans-Regular` သုံးရင် WP root + `p` ပေါ် **`font-weight: 400`** — visual-typography Step 3c။ Card paragraphs ပေါ် host-inherited light weight **မထား**။
 
-Do not say “looks close” or “desktop is fine, mobile later”.
+“looks close” သို့ “desktop is fine, mobile later” **မပြော**။
 
 ## Validation
 
-Side-by-side classic vs SPFx at **each** classic/UIKit breakpoint used by the slice:
+Slice သုံးသည့် classic/UIKit breakpoint **တိုင်း** မှာ classic vs SPFx ဘေးချင်း:
 
 1. font-size, weight, color, BG
 2. gap/gutter, margin, padding, break line
 3. letter-spacing, line-height
 4. hover + animation (keyframes, modal/sticky motion)
-5. `uk-hidden@*` / `uk-visible@*` show-hide and child widths
+5. `uk-hidden@*` / `uk-visible@*` show-hide နှင့် child widths
 
-Then run `gulp bundle` in `DBS-FFW-SPFX`. Visual match is blocking even if the bundle passes.
+ပြီး `DBS-FFW-SPFX` မှာ `gulp bundle`။ Bundle အောင်ရုံ visual match **blocking**။
 
 ## Anti-patterns
 
-- Copying all of `uikit.css` / `uikit.js` into SPFx
-- Porting `style.css` only and treating UIKit/Bootstrap as unused vendor
-- Replacing `uk-grid` with an arbitrary CSS `gap`
-- Keeping `uk-*` class names under CSS Modules without porting rules
-- Replacing classic/UIKit `@media` px with Fluent 480 / 1024
-- Dropping `@keyframes` and shipping hover-only or no motion
-- Converting UIKit `px`/`rem` to theme tokens or glassmorphism
+- `uikit.css` / `uikit.js` အားလုံး SPFx ထဲ ကူး
+- `style.css` သာ ပို့ပြီး UIKit/Bootstrap ကို unused vendor သတ်
+- `uk-grid` ကို စိတ်ကြိုက် CSS `gap` အစား
+- CSS Modules အောက် `uk-*` class names ထားပြီး rules မပို့
+- Classic/UIKit `@media` px ကို Fluent 480 / 1024 အစား
+- `@keyframes` ဖြုတ်ပြီး hover-only သို့ motion မရှိ ပို့
+- UIKit `px`/`rem` ကို theme tokens သို့ glassmorphism ပြောင်း

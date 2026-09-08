@@ -1,13 +1,15 @@
 # Classic ↔ SPFx parity inventory (DBS-FFW)
 
-Site URL: confirm at deploy (no hardcoded tenant/site path). Visual SoT = classic `.aspx` + `DBS-FFW-classicsite/2025/style.css`. Cutover only when Status = **parity PASS**.
+> Docs ဘာသာပြန် — live SoT = `docs/migration/PARITY.md`။ Copy သုံးရင် Status tokens အင်္ဂလိပ်မူ ထား။
+
+Site URL: deploy မှာ အတည်ပြု (hardcoded tenant/site path မရှိ)။ Visual SoT = classic `.aspx` + `DBS-FFW-classicsite/2025/style.css`။ Status = **parity PASS** မှသာ cutover။
 
 ## Canonical
 
 | Host | Notes |
 |------|--------|
 | Classic `DBS-FFW-classicsite/` | year folders `2023/` `2024/` `2025/`; live SoT = `2025/` |
-| SPFx `DBS-FFW-SPFX/` | one WP per live page; **Ffw** already scaffolded |
+| SPFx `DBS-FFW-SPFX/` | live page တစ်ခု = WP တစ်ခု; **Ffw** scaffold ပြီး |
 
 ## Pages
 
@@ -21,15 +23,15 @@ Site URL: confirm at deploy (no hardcoded tenant/site path). Visual SoT = classi
 
 ## Chrome
 
-Classic chrome = **inline** `header.page-banner` per ASPX. Site Pages `ShowHeader` / `ShowFooter` / `ShowBanner` only if the user asks to hide modern SP chrome — see `references/site-chrome.md`.
+Classic chrome = ASPX တိုင်း **inline** `header.page-banner`။ Modern SP chrome ဖျောက်ရန် user တောင်းမှသာ Site Pages `ShowHeader` / `ShowFooter` / `ShowBanner` — `references/site-chrome.md`။
 
 ## Immutable contracts
 
 - Classic class semantics + visual token rows (`classic-visual-parity`)
-- No hardcoded site path
-- OpenSans-Condensed weights used by classic CSS must load on SPFx
+- Hardcoded site path မရှိ
+- Classic CSS သုံး OpenSans-Condensed weights SPFx မှာ load ရမည်
 - Data = year JSON (`events.json`, `participants.json`, `winnerlists.json`) via `SPHttpClient` / fetch; `@pnp/sp` ask-first
-- Do not invent SharePoint lists unless the slice’s script proves them
+- Slice script က သက်သေမပြလျှင် SharePoint lists မတီထွင်
 
 ## Visual PASS checklist
 
@@ -37,8 +39,8 @@ font-size · **font-weight** · font color · BG · spacing · gap · margin · 
 
 | Status | Meaning |
 |--------|---------|
-| inventory only | Docs only |
-| wired / baseline | Func OK; visual may FAIL |
+| inventory only | Docs သာ |
+| wired / baseline | Func OK; visual FAIL နိုင် |
 | parity PASS | Func + Visual |
 
-Fill live status in `docs/migration/PARITY.md` (repo SoT) — keep in sync with `progress.md`. This file is the skill template copy.
+Live status = `docs/migration/PARITY.md` (repo SoT) — `progress.md` နဲ့ sync။ ဤဖိုင် = skill template copy။

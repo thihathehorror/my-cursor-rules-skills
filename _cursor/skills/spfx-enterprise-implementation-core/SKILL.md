@@ -1,40 +1,39 @@
 ---
 name: spfx-enterprise-implementation-core
-description: Core implementation standards for enterprise SPFx web parts, extensions, and shared modules.
+description: "[MM] Enterprise SPFx web parts, extensions, shared modules အတွက် core implementation စံနှုန်းများ"
 ---
 
 # SPFx Enterprise Implementation Core
 
 ## Use for
 
-1. Defining implementation approach for SPFx workloads.
-2. Enforcing service boundaries, error handling, and typed contracts.
-3. Aligning code changes with enterprise maintainability standards.
+1. SPFx workloads အတွက် implementation ချဉ်းကပ်ပုံ သတ်မှတ်။
+2. Service boundaries, error handling, typed contracts အတင်း။
+3. ကုဒ်ပြောင်းလဲမှုကို enterprise maintainability စံနှုန်းများနဲ့ ညှိ။
 
 ## Do not use for
 
-1. Webpack-specific tuning.
-2. Pure design/styling decisions without implementation impact.
+1. Webpack-specific tuning။
+2. Implementation မထိသော pure design/styling ဆုံးဖြတ်ချက်။
 
 ## Trigger conditions
 
-1. Any new feature or significant refactor in SPFx code.
-2. Cross-webpart shared service/component changes.
+1. SPFx ကုဒ်ထဲ feature အသစ် သို့ significant refactor မဆို။
+2. Cross-webpart shared service/component ပြောင်းလဲမှု။
 
 ## Enterprise guardrails
 
-1. Keep changes scoped and reversible.
-2. Preserve API contracts unless explicitly requested.
-3. Require test updates for changed logic paths.
+1. ပြောင်းလဲမှု scoped + ပြန်လှည့်နိုင်။
+2. အတိအလင်း မတောင်းလျှင် API contracts ထိန်း။
+3. Logic paths ပြင်ရင် test updates လို။
 
 ## Output expectations
 
-1. Clear module boundaries and typed interfaces.
-2. Predictable error and loading behavior.
-3. No incidental runtime dependency drift.
+1. Module boundaries ရှင်း + typed interfaces။
+2. Error နှင့် loading behavior ခန့်မှန်းနိုင်။
+3. Incidental runtime dependency drift မရှိ။
 
-## Typical target paths (any SPFx project)
+## Typical target paths (SPFx ပရောဂျက် မဆို)
 
 1. `src/webparts/**`
 2. `src/shared/**`
-

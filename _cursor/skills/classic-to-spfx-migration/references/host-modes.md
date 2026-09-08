@@ -1,42 +1,42 @@
 # Host modes — Full Width WP + Single-page app
 
-This repo ships **one web part per classic page** (Home, Step1, Reporting, …), not a single hub with `pageKey`. Each WP that must match classic page width uses the same host contract.
+ဤ repo = **classic page တစ်ခု = web part တစ်ခု** (Home, Step1, Reporting, …) — `pageKey` ပါ hub တစ်ခုမဟုတ်။ Classic page width ကိုက်ရမည့် WP တိုင်း host contract တူသုံး။
 
-## Manifest (already on Step1 / Reporting / Home as shipped)
+## Manifest (Step1 / Reporting / Home shipped အတိုင်း)
 
 ```json
 "supportedHosts": ["SharePointWebPart", "SharePointFullPage"],
 "supportsFullBleed": true
 ```
 
-Do not drop `supportsFullBleed` on a clone WP. Workbench-only width is not Visual PASS.
+Clone WP မှ `supportsFullBleed` **မဖြုတ်**။ Workbench-only width = Visual PASS မဟုတ်။
 
 ## A — Single Web Part (Site Page)
 
-1. Editor: place the part in a **full-width** section (fullBleed-capable canvas).
-2. Runtime: unlock canvas **ancestors** for:
+1. Editor: part ကို **full-width** section ထဲ ထား (fullBleed-capable canvas)။
+2. Runtime: canvas **ancestors** unlock:
    - **width** (canvas max-width / padding)
    - **height + overflow** (`.ms-SPLegacyFabricBlock` ~450px clip → flash-then-blank / clipped scroll)
-3. `ResizeObserver` → sync host `minHeight` to content root height. Dispose on unmount.
-4. CSS `width:100%; max-width:none` **only if** unlock found **no** ancestors — do not stack `100vw` ±50% breakout on unlock.
-5. On dispose: clear unlock attributes / inline overrides.
+3. `ResizeObserver` → content root height ကို host `minHeight` sync။ Unmount မှာ dispose။
+4. Unlock က ancestors **မတွေ့မှသာ** CSS `width:100%; max-width:none` — unlock ပေါ် `100vw` ±50% breakout **မထပ်**။
+5. Dispose: unlock attributes / inline overrides ရှင်း။
 
 ## B — Single-page app (Full Page)
 
-1. Site page → **Single-page app** → one WP per route (this repo: separate WPs, not one router).
-2. Form factor FullPage via `SharePointFullPage`.
-3. **No** parent unlock by default. Keep unlock as fallback if canvas still clips after deploy.
+1. Site page → **Single-page app** → route တိုင်း WP တစ်ခု (ဤ repo: WPs သီးခြား၊ router တစ်ခုမဟုတ်)။
+2. Form factor FullPage = `SharePointFullPage`။
+3. Default **parent unlock မလုပ်**။ Deploy ပြီး canvas clip နေသေးရင် unlock = fallback။
 
 ## Do / Don't
 
 | Do | Don't |
 |----|-------|
-| Smoke full-width **section** on a modern page | Assume `supportsFullBleed` CSS alone fixes the canvas |
-| Unlock height/overflow, not only width | Leave FabricBlock 450px lock |
-| Smoke WP full-width **and** SPA if both are used | Claim full width after workbench-only check |
+| Modern page မှာ full-width **section** smoke | `supportsFullBleed` CSS တစ်ခုတည်း canvas ပြင်မည်ဟု ယူဆ |
+| Height/overflow unlock — width သာ မဟုတ် | FabricBlock 450px lock ထား |
+| WP full-width **နှင့်** SPA (နှစ်ခုလုံးသုံးရင်) smoke | Workbench-only စစ်ပြီး full width ကြေညာ |
 
 ## Smoke
 
-- Full-width section → content matches classic width; long pages scroll; no 450px clip
-- SPA (if used) → no double chrome if product requires hide (`references/site-chrome.md`)
-- Hard refresh after `.sppkg` update
+- Full-width section → content classic width တူ; ရှည် pages scroll; 450px clip မရှိ
+- SPA (သုံးရင်) → product က hide လိုရင် double chrome မရှိ (`references/site-chrome.md`)
+- `.sppkg` update ပြီး hard refresh

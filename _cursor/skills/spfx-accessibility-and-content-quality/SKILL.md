@@ -1,40 +1,39 @@
 ---
 name: spfx-accessibility-and-content-quality
-description: Accessibility and UX text quality guidance for enterprise SPFx experiences.
+description: "[MM] Enterprise SPFx accessibility နှင့် UX text quality guidance"
 ---
 
 # SPFx Accessibility and Content Quality
 
 ## Use for
 
-1. Keyboard, focus, and screen-reader validation.
-2. Placeholder/fallback/empty/error state quality.
-3. UI text clarity, tone, and actionability.
+1. Keyboard, focus, screen-reader validation။
+2. Placeholder/fallback/empty/error state quality။
+3. UI text ရှင်းလင်းမှု၊ tone၊ actionability။
 
 ## Do not use for
 
-1. Build pipeline changes.
-2. Back-end/service-only updates with no UI impact.
+1. Build pipeline ပြောင်းလဲမှု။
+2. UI မထိသော back-end/service-only updates။
 
 ## Trigger conditions
 
-1. New command surfaces or interaction flows.
-2. Any user-visible text or state model changes.
+1. Command surfaces သို့ interaction flows အသစ်။
+2. User-visible text သို့ state model ပြောင်းလဲမှု မဆို။
 
 ## Enterprise guardrails
 
-1. Ensure non-mouse operation parity.
-2. Avoid ambiguous microcopy.
-3. Provide clear recovery paths from error and empty states.
+1. Non-mouse operation parity။
+2. ဝေဝါး microcopy ရှောင်။
+3. Error နှင့် empty states မှ recovery paths ရှင်း။
 
 ## Output expectations
 
-1. Accessible and understandable UI.
-2. Reduced support burden from unclear interactions.
+1. Accessible နှင့် နားလည်ရသော UI။
+2. ရှင်းမထားသော interactions ကြောင့် support ဝန် လျှော့။
 
-## Typical target paths (any SPFx project)
+## Typical target paths (SPFx ပရောဂျက် မဆို)
 
 1. `src/webparts/**/components`
 2. `src/shared/components`
 3. `src/shared/licensing-ui`
-

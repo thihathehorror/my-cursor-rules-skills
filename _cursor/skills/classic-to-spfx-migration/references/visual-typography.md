@@ -1,45 +1,45 @@
 # Visual typography — font-weight, links & host inherit (self-check)
 
-**Companion to** `classic-visual-parity` — run this **mandatory self-check** on every UI migrate / visual parity slice **before** claiming parity PASS or closing a typography fix.
+**Companion to** `classic-visual-parity` — UI migrate / visual parity slice **တိုင်း** parity PASS မကြေညာမီ / typography fix မပိတ်မီ ဤ **mandatory self-check** မောင်း။
 
-Fluent tokens do **not** win before Visual PASS.
+Visual PASS မတိုင်မီ Fluent tokens **မနိုင်**။
 
-## Per-year font SoT (do not mix years)
+## Per-year font SoT (years မရော)
 
 | Year folder | Named `@font-face` families | Classic font path |
 |-------------|----------------------------|-------------------|
 | `2023/` · `2024/` | `OpenSans-Bold`, `OpenSans-SemiBold`, `OpenSans-Medium`, `OpenSans-Regular`, `OpenSans-Light` | `{year}/public/fonts/opensans/` · `{year}/sass/_fonts.sass` |
 | `2025/` | `OpenSans-Condensed-ExtraBold`, `OpenSans-Condensed-Bold`, `OpenSans-Condensed-Regular`, `OpenSans-Condensed-Light` | `2025/public/Fonts/opensans-condensed/` |
 
-Visual SoT = **that slice’s year** `style.css` + `sass/_fonts.sass` — not 2025-only when migrating `2023/index.aspx`.
+Visual SoT = **ထို slice ၏ year** `style.css` + `sass/_fonts.sass` — `2023/index.aspx` migrate သည့်အခါ 2025-only မဟုတ်။
 
-## Why SPFx looks “a bit light” vs classic
+## SPFx က classic ထက် “ပါး” မြင်ရသည့် အကြောင်း
 
-1. **SP canvas inherit** — ancestors force **Segoe UI**; classic named faces never apply on the WP root.
-2. **Named face + missing weight** — classic uses separate families (`OpenSans-Bold`) not `font-weight: 700`. SPFx must set **`font-weight: 400`** on every selector using a named Bold/SemiBold face or the face renders soft / wrong.
-3. **Root baseline missing** — `.ffw2023Root` (or slice root) sets `font-family: OpenSans-Regular` but omits `font-weight: 400` on headings/menu/links using Bold faces.
-4. **Font files not loaded** — `@font-face` missing or wrong path vs classic bundled fonts.
-5. **Selector loses to host** — SharePoint / Fluent link rules override cloned classes (especially `<a>`).
-6. **Link underline (not in classic CSS)** — host adds `text-decoration: underline` on `<a>`; classic pill nav has **no** underline visually.
-7. **Remount** — computed weight drifts after canvas inject.
+1. **SP canvas inherit** — ancestors က **Segoe UI** အတင်း; classic named faces WP root ပေါ် မသက်ရောက်။
+2. **Named face + missing weight** — classic = သီးခြား families (`OpenSans-Bold`)၊ `font-weight: 700` မဟုတ်။ Named Bold/SemiBold face သုံးသည့် selector တိုင်း SPFx မှာ **`font-weight: 400`** မထားရင် face က ပျော့/မှား။
+3. **Root baseline ပျောက်** — `.ffw2023Root` (သို့ slice root) က `font-family: OpenSans-Regular` ထားသော် Bold faces သုံးသည့် headings/menu/links ပေါ် `font-weight: 400` ချန်။
+4. **Font files မload** — `@font-face` ပျောက် သို့ classic bundled fonts နဲ့ path မှား။
+5. **Selector က host ကို ရှုံး** — SharePoint / Fluent link rules က cloned classes override (အထူးသဖြင့် `<a>`)။
+6. **Link underline (classic CSS မှာ မရှိ)** — host က `<a>` ပေါ် `text-decoration: underline` ထည့်; classic pill nav မှာ underline **မမြင်**။
+7. **Remount** — canvas inject ပြီး computed weight drift။
 
 ## Named-face rule table (blocking)
 
-When classic CSS has `font-family: 'OpenSans-Bold'` (or SemiBold / Condensed-Bold / etc.):
+Classic CSS မှာ `font-family: 'OpenSans-Bold'` (သို့ SemiBold / Condensed-Bold / စသည်) ရှိရင်:
 
-| Classic | SPFx module.scss (same selector) |
+| Classic | SPFx module.scss (selector တူ) |
 |---------|----------------------------------|
-| `font-family: 'OpenSans-Bold'` | Same family + **`font-weight: 400`** |
-| `font-family: 'OpenSans-SemiBold'` | Same + **`font-weight: 400`** |
-| `font-family: 'OpenSans-Regular'` | Same + **`font-weight: 400`** on WP root and `p` (UIKit `html` default) — host may lighten body copy vs classic |
-| `h2` + Bold face | Classic often has `font-weight: 400` explicitly — port it |
-| Nav / menu `<a>` with Bold face | **`font-weight: 400`** + see link rule below |
+| `font-family: 'OpenSans-Bold'` | Family တူ + **`font-weight: 400`** |
+| `font-family: 'OpenSans-SemiBold'` | တူ + **`font-weight: 400`** |
+| `font-family: 'OpenSans-Regular'` | တူ + WP root နှင့် `p` ပေါ် **`font-weight: 400`** (UIKit `html` default) — host က body copy ကို classic ထက် ပေါ့စေနိုင် |
+| `h2` + Bold face | Classic မကြာခဏ `font-weight: 400` အတိအလင်း — ပို့ |
+| Nav / menu `<a>` + Bold face | **`font-weight: 400`** + အောက် link rule |
 
-Do **not** substitute `font-weight: 700` + Segoe for named Bold faces.
+Named Bold faces အစား `font-weight: 700` + Segoe **မအစား**။
 
 ## Link / menu rule (SharePoint host)
 
-Classic desktop menu often omits `text-decoration: none` on base state (no host underline). SPFx **must** add on nav/menu anchors:
+Classic desktop menu က base state မှာ `text-decoration: none` မကြာခဏ ချန် (host underline မရှိ)။ SPFx က nav/menu anchors ပေါ် **မဖြစ်မနေ** ထည့်:
 
 ```scss
 .menu ul li a,
@@ -50,106 +50,106 @@ Classic desktop menu often omits `text-decoration: none` on base state (no host 
 /* + :hover, :focus, :visited as needed */
 ```
 
-Scope to menu/nav selectors only — do not strip underline from `.sub-description a` and other intentional content links.
+Menu/nav selectors သာ scope — `.sub-description a` နှင့် ရည်ရွယ် content links မှ underline **မဖြုတ်**။
 
-## Mandatory self-check (agent — every UI slice)
+## Mandatory self-check (agent — UI slice တိုင်း)
 
-Run **before** parity PASS, after SCSS port, or when user says font “ပါး” / “ထူ” / “light”:
+Parity PASS မတိုင်မီ၊ SCSS port ပြီး၊ သို့ user က font “ပါး” / “ထူ” / “light” ပြောရင်:
 
-### Step 1 — Grep classic vs SPFx
+### Step 1 — Classic vs SPFx Grep
 
-For the slice, grep classic `{year}/style.css` for `font-family`, `font-weight`, `text-decoration` on selectors you ported. Diff against `*.module.scss`. Flag any classic `OpenSans-*Bold*` / `SemiBold` without matching `font-weight: 400` in SPFx.
+Slice အတွက် classic `{year}/style.css` မှာ ပို့ထားသော selectors ၏ `font-family`, `font-weight`, `text-decoration` Grep။ `*.module.scss` နဲ့ diff။ Classic `OpenSans-*Bold*` / `SemiBold` ရှိပြီး SPFx မှာ `font-weight: 400` မရှိရင် flag။
 
-### Step 2 — Apply rule table
+### Step 2 — Rule table သုံး
 
-Fix every named Bold/SemiBold selector. Add menu/link `text-decoration: none` where classic shows no underline.
+Named Bold/SemiBold selector တိုင်း ပြင်။ Classic မှာ underline မရှိရင် menu/link `text-decoration: none` ထည့်။
 
-### Step 3 — Output checklist (in chat or handoff)
+### Step 3 — Output checklist (chat သို့ handoff)
 
-Short table required — do not skip:
+တိုတောင်း table **မကျော်ရ**:
 
 | Selector / surface | Classic family | SPFx family | SPFx weight | Link deco | Status |
 |--------------------|----------------|-------------|-------------|-----------|--------|
 | e.g. `.menu ul li a` | OpenSans-Bold | OpenSans-Bold | 400 | none | OK / FIX |
 
-Surfaces to always include when present: **root**, **`p` / card-wrap body copy**, **h2/main-title**, **page-banner date/description**, **post-event menu**, **mobile `.page-menu`**, **buttons/CTAs** using Bold face.
+ရှိရင် အမြဲထည့်: **root**, **`p` / card-wrap body copy**, **h2/main-title**, **page-banner date/description**, **post-event menu**, **mobile `.page-menu`**, Bold face သုံး **buttons/CTAs**။
 
-### Step 3b — UIKit heading line-height (blocking when slice uses `uk-container` + `h2`)
+### Step 3b — UIKit heading line-height (`uk-container` + `h2` သုံးရင် blocking)
 
-Classic pages load UIKit **before** page CSS. Page `style.css` often sets `h2 { font-size: … }` but **does not** set `line-height` — computed title line-height comes from UIKit:
+Classic pages က page CSS မတိုင်မီ UIKit load။ Page `style.css` က `h2 { font-size: … }` ထားသော် **line-height မထား** မကြာခဏ — computed title line-height = UIKit:
 
-| UIKit selector | `line-height` (this repo vendor) |
+| UIKit selector | `line-height` (ဤ repo vendor) |
 |--------------|----------------------------------|
 | `h2`, `.uk-h2` | **`1.3`** |
 | `h1`, `.uk-h1` | `1.2` |
 | `h3`, `.uk-h3` | `1.4` |
 
-SPFx WP root often sets `line-height: 28px` on the root/body clone. Without porting UIKit `h2 { line-height: 1.3 }`, section titles (`.main-title`) inherit **28px** instead of **1.3** → title box too tight, star pseudo-elements misaligned, title→card gap looks wrong.
+SPFx WP root က root/body clone ပေါ် `line-height: 28px` မကြာခဏ။ UIKit `h2 { line-height: 1.3 }` မပို့ရင် section titles (`.main-title`) က **1.3** အစား **28px** inherit → title box တင်းလွန်း၊ star pseudo-elements လွဲ၊ title→card gap မှား။
 
-**Agent rule (do not wait for user to repeat):**
+**Agent rule (user ထပ်မပြောစေနှင့်):**
 
-1. If ASPX uses `uk-container` (or other UIKit layout) and section titles are `h2` / `.main-title`, port **`line-height: 1.3`** on `h2` (or `.main-title` if slice has no other `h2`) in `*.module.scss`.
-2. Grep classic `{year}/public/css/vendor/uikit.min.css` for `h2{` / `line-height` — do not guess.
-3. Add row to typography checklist:
+1. ASPX က `uk-container` (သို့ UIKit layout) သုံးပြီး section titles = `h2` / `.main-title` → `*.module.scss` မှာ `h2` ပေါ် **`line-height: 1.3`** ပို့ (slice မှာ အခြား `h2` မရှိရင် `.main-title`)။
+2. Classic `{year}/public/css/vendor/uikit.min.css` မှာ `h2{` / `line-height` Grep — မမှန်း။
+3. Typography checklist မှာ row ထည့်:
 
 | Selector | Classic/UIKit | SPFx | Status |
 |----------|---------------|------|--------|
 | `h2` / `.main-title` | `line-height: 1.3` | must match | OK / FIX |
 
-See also `uikit-to-spfx-visual-parity` — UIKit heading defaults table.
+`uikit-to-spfx-visual-parity` UIKit heading defaults table ကိုလည်း ကြည့်။
 
-### Step 3c — Body copy / card-wrap `p` weight (blocking when slice uses `uk-container`)
+### Step 3c — Body copy / card-wrap `p` weight (`uk-container` သုံးရင် blocking)
 
-Classic `style.css` sets `p { font-family: OpenSans-Regular; font-size: 17px; line-height: 28px }` — often **no** explicit `font-weight`. Live classic = UIKit `html { font-weight: 400 }` + Regular face → body copy looks **normal weight**.
+Classic `style.css` က `p { font-family: OpenSans-Regular; font-size: 17px; line-height: 28px }` — `font-weight` အတိအလင်း **မရှိ** မကြာခဏ။ Live classic = UIKit `html { font-weight: 400 }` + Regular face → body copy = **normal weight**။
 
-SPFx WP root may set `font-family: OpenSans-Regular` but **omit** `font-weight: 400` on root and `p`. SharePoint canvas inherit can render card copy (`section .card-wrap .card-content p`, `.main-sub-title`, highlights intro `p`) **lighter/thinner** than classic (“classicsite ထူ · SPFx ပါး”).
+SPFx WP root က `font-family: OpenSans-Regular` ထားသော် root နှင့် `p` ပေါ် `font-weight: 400` **ချန်**နိုင်။ SharePoint canvas inherit က card copy (`section .card-wrap .card-content p`, `.main-sub-title`, highlights intro `p`) ကို classic ထက် **ပေါ့/ပါး** စေ (“classicsite ထူ · SPFx ပါး”)။
 
-**Agent rule (do not wait for user to repeat):**
+**Agent rule (user ထပ်မပြောစေနှင့်):**
 
-1. Set **`font-weight: 400`** on slice WP root (e.g. `.ffw2023Root`) and on **`:global p`** when classic uses `OpenSans-Regular` for body copy.
+1. Slice WP root (ဥပမာ `.ffw2023Root`) နှင့် classic body copy က `OpenSans-Regular` သုံးရင် **`:global p`** ပေါ် **`font-weight: 400`** ထား။
 2. Typography checklist row:
 
 | Selector | Classic/UIKit | SPFx | Status |
 |----------|---------------|------|--------|
 | WP root + `p` / `.card-wrap p` | `font-weight: 400` + OpenSans-Regular | must match | OK / FIX |
 
-3. If still light after weight fix: Network tab — OpenSans `.woff2` → 200 (font not loaded = Segoe fallback).
+3. Weight ပြင်ပြီး ပေါ့နေသေးရင်: Network tab — OpenSans `.woff2` → 200 (font မload = Segoe fallback)။
 
-### Step 4 — Manual QA (when served)
+### Step 4 — Manual QA (serve ပြီး)
 
-DevTools computed on SPFx vs classic same breakpoint:
+DevTools computed — SPFx vs classic breakpoint တူ:
 
-- [ ] `font-family` = classic named face (not Segoe primary)
-- [ ] `font-weight` = `400` on named Bold/SemiBold selectors
-- [ ] Menu/nav links: no host underline
+- [ ] `font-family` = classic named face (Segoe primary မဟုတ်)
+- [ ] Named Bold/SemiBold selectors ပေါ် `font-weight` = `400`
+- [ ] Menu/nav links: host underline မရှိ
 - [ ] Network: font `.woff2` / `.woff` → 200
 
-## Win order (fix)
+## Win order (ပြင်)
 
-1. Inventory classic selectors (`classic-visual-parity`) — skip none
-2. Port exact px/hex/family into `*.module.scss`
-3. Apply **named-face rule table** on every Bold/SemiBold selector
-4. Menu/nav link `text-decoration: none` where classic has no underline
-5. WP root: classic `font-family` stack + `font-weight: 400` baseline on Bold headings if still soft
-6. Reuse year-correct `@font-face` from classic fonts folder (bundled in sppkg)
-7. Fix fighting `style={{}}` / theme slots before adding `!important`
+1. Classic selectors inventory (`classic-visual-parity`) — ကျော်မရ
+2. px/hex/family တိကျ `*.module.scss` ထဲ ပို့
+3. Bold/SemiBold selector တိုင်း **named-face rule table** သုံး
+4. Classic မှာ underline မရှိရင် menu/nav `text-decoration: none`
+5. WP root: classic `font-family` stack + Bold headings ပေါ့နေသေးရင် `font-weight: 400` baseline
+6. Classic fonts folder မှ year-correct `@font-face` ပြန်သုံး (sppkg ထဲ bundle)
+7. `!important` မထည့်မီ တိုက်နေသော `style={{}}` / theme slots ပြင်
 
-## Repo examples (Ffw2023 — copy pattern)
+## Repo examples (Ffw2023 — ပုံစံကူး)
 
 | Issue | Classic | SPFx fix |
 |-------|---------|----------|
-| Menu too light | `.menu ul li a { font-family: OpenSans-Bold }` | + `font-weight: 400` |
-| Menu underline | no underline visually | + `text-decoration: none; border-bottom: none` on menu `<a>` |
-| Date bold soft | `.date { OpenSans-Bold }` | + `font-weight: 400` |
-| h2 soft | `h2 { OpenSans-Bold; font-weight: 400 }` | port both |
-| Card copy light | `p` in `#post-about` / `.card-wrap` — Regular, implicit 400 | + `font-weight: 400` on root + `p` |
+| Menu ပေါ့လွန်း | `.menu ul li a { font-family: OpenSans-Bold }` | + `font-weight: 400` |
+| Menu underline | visually underline မရှိ | menu `<a>` ပေါ် + `text-decoration: none; border-bottom: none` |
+| Date bold ပျော့ | `.date { OpenSans-Bold }` | + `font-weight: 400` |
+| h2 ပျော့ | `h2 { OpenSans-Bold; font-weight: 400 }` | နှစ်ခုလုံး ပို့ |
+| Card copy ပေါ့ | `#post-about` / `.card-wrap` ထဲ `p` — Regular, implicit 400 | root + `p` ပေါ် + `font-weight: 400` |
 
 Files: `Ffw2023.module.scss` · `PageBanner.tsx` menu markup.
 
 ## Reject
 
-- Marking parity PASS without typography self-check table
-- “CSS copied from classic” while named Bold selectors lack `font-weight: 400`
-- Fluent tokens / Segoe as primary stack pre-PASS
-- Global `a { text-decoration: none }` that breaks content underlines
-- `font-weight: 700` instead of named OpenSans-Bold face
+- Typography self-check table မရှိဘဲ parity PASS ကြေညာ
+- “CSS copied from classic” ဟုဆိုသော် named Bold selectors မှာ `font-weight: 400` မရှိ
+- PASS မတိုင်မီ Fluent tokens / Segoe ကို primary stack
+- Content underlines ချိုးသော global `a { text-decoration: none }`
+- Named OpenSans-Bold face အစား `font-weight: 700`

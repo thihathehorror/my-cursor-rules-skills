@@ -1,56 +1,58 @@
 ---
 name: spfx-enterprise-design-core
-description: Core design guidance for SPFx web parts and extensions. Use for layout, hierarchy, commanding, text, empty states, and responsive behavior when building or reviewing SPFx UX.
+description: >-
+  [MM] SPFx web parts/extensions core design guidance။ Layout, hierarchy,
+  commanding, text, empty states, responsive — SPFx UX တည်ဆောက်/review သည့်အခါ။
 ---
 
 # SPFx Enterprise Design Core
 
-Use this skill whenever you are **designing or reviewing SPFx UX**, not just a specific repo. It encodes Microsoft guidance for SharePoint web parts and extensions so any AI editor can propose **consistent, accessible, performant** UX.
+**SPFx UX ဒီဇိုင်း သို့ review** လုပ်သည့်အခါ သုံး — repo တစ်ခုတည်းမဟုတ်။ SharePoint web parts/extensions အတွက် Microsoft guidance encode — AI editor က **consistent, accessible, performant** UX အကြံပေးနိုင်ရန်။
 
-Key MS references (for deeper detail – read only when needed):
+Key MS references (လိုမှသာ ဖတ်):
 - Web part design overview: https://learn.microsoft.com/sharepoint/dev/design/design-guidance-overview
 - Design a web part: https://learn.microsoft.com/sharepoint/dev/design/design-a-web-part
 - Design considerations for web parts: https://learn.microsoft.com/sharepoint/dev/spfx/web-parts/basics/design-considerations-for-web-parts
-- Web part levels, titles, descriptions, commanding, layout patterns, empty states, accessibility, examples, and icons: https://learn.microsoft.com/sharepoint/dev/design/
+- Web part levels, titles, descriptions, commanding, layout patterns, empty states, accessibility, examples, icons: https://learn.microsoft.com/sharepoint/dev/design/
 
 ---
 
 ## 1. When to apply this skill
 
-Apply this guidance for **any SPFx UI change**, including:
+**SPFx UI ပြောင်းလဲမှု မဆို**:
 
-- New or significantly updated **web parts**
-- New **SPFx extensions** that introduce UI (Application/Field Customizers, Command Sets)
-- Changes to:
-  - Layout, card structure, or grid behavior
-  - Web part **titles, descriptions, and commands**
-  - **Empty, loading, error, and placeholder** experiences
-  - **Responsive behavior** across breakpoints
-  - **Information architecture** (content groupings, levels, and flows)
+- **Web parts** အသစ် သို့ သိသိသာသာ ပြင်
+- UI ထည့်သော **SPFx extensions** အသစ် (Application/Field Customizers, Command Sets)
+- ပြောင်းလဲမှုများ:
+  - Layout, card structure, grid behavior
+  - Web part **titles, descriptions, commands**
+  - **Empty, loading, error, placeholder** experiences
+  - Breakpoints ကြား **responsive behavior**
+  - **Information architecture** (content groupings, levels, flows)
 
-Do **not** use for:
-- Build/toolchain-only work (Heft/webpack, packaging)
-- Pure back-end/service work with no user-facing surface
-- **this repo classic visual clone** of type, color, spacing, hover, animation, or `@media` breakpoints — use `classic-visual-parity` (this skill's “no pixel-perfect” and 480/1024 rules do **not** apply there)
+**မသုံး**:
+- Build/toolchain-only (Heft/webpack, packaging)
+- User-facing surface မရှိ pure back-end/service
+- **ဤ repo classic visual clone** — type, color, spacing, hover, animation, `@media` breakpoints → `classic-visual-parity` (ဤ skill ၏ “no pixel-perfect” နှင့် 480/1024 rules **မသက်ရောက်**)
 
 ---
 
 ## 2. Web part structure & levels
 
-Design SPFx web parts with **clear levels** and hierarchy:
+SPFx web parts ကို **levels ရှင်း** + hierarchy ဖြင့် ဒီဇိုင်း:
 
 1. **Web part level**
-   - Title: clear, action- or outcome-oriented (e.g., "Permissions risk heatmap", not "PRH")
-   - Description: 1–2 concise sentences answering: _What does this do?_ and _Why should I care?_
-   - Optional **subtitle/context**: scope or key filter (e.g., "Current site", "Last 30 days").
+   - Title: ရှင်း၊ action- သို့ outcome-oriented (ဥပမာ "Permissions risk heatmap", "PRH" မဟုတ်)
+   - Description: စာကြောင်း ၁–၂ — _ဘာလုပ်သလဲ?_ နှင့် _ဘာကြောင့် အရေးပါသလဲ?_
+   - Optional **subtitle/context**: scope သို့ key filter (ဥပမာ "Current site", "Last 30 days")။
 
 2. **Section / region level**
-   - Group related content into visually distinct regions (cards, panels, tabs).
-   - Each region should have a **clear label** (heading) and purpose.
+   - ဆက်စပ် content ကို visually သီးခြား regions (cards, panels, tabs)။
+   - Region တိုင်း **label (heading) ရှင်း** + purpose။
 
 3. **Item level**
-   - Each row/card/tile must make sense on its own: label, primary metric/state, and key action.
-   - Favor **progressive disclosure**: show high-value info first; move details into drill-ins.
+   - Row/card/tile တိုင်း တစ်ခုတည်းနဲ့ နားလည်ရ: label, primary metric/state, key action။
+   - **Progressive disclosure**: high-value info အရင်; details = drill-ins။
 
 Implementation snippet (React):
 ```ts
@@ -76,25 +78,25 @@ return (
 
 ## 3. Layout & responsive design
 
-Follow grid and responsive patterns from:
+Grid နှင့် responsive patterns:
 - https://learn.microsoft.com/sharepoint/dev/design/grid-and-responsive-design
 - https://learn.microsoft.com/sharepoint/dev/design/layout-patterns
 
 Core rules:
 
-1. **Use responsive layouts, not fixed widths**
-   - Prefer CSS `grid` / `flex` with min/max widths.
-   - Avoid horizontal scroll for primary flows; let cards wrap.
+1. **Fixed widths မဟုတ် — responsive layouts**
+   - CSS `grid` / `flex` + min/max widths ဦးစားပေး။
+   - Primary flows မှာ horizontal scroll ရှောင်; cards wrap။
 
-2. **Breakpoints** (heuristics) — generic SPFx only
-   - **Small (< 480px)**: single-column, stacked content; hide non-essential chrome.
-   - **Medium (480–1024px)**: two-column cards, condensed table, fewer visible commands.
+2. **Breakpoints** (heuristics) — generic SPFx သာ
+   - **Small (< 480px)**: single-column, stacked; မလို chrome ပုန်း။
+   - **Medium (480–1024px)**: two-column cards, condensed table, commands နည်း။
    - **Large (> 1024px)**: full grid/table, full command bar.
-   - **Exception (this repo classic clone):** copy `@media` widths from `DBS-FFW-classicsite/2025/style.css` (commonly 1200 / 1024 / 959 / 768 / 640 / 480). Do **not** replace with Fluent-only 480/1024 heuristics.
+   - **ခြွင်းချက် (ဤ repo classic clone):** `DBS-FFW-classicsite/2025/style.css` မှ `@media` widths ကူး (အများအားဖြင့် 1200 / 1024 / 959 / 768 / 640 / 480)။ Fluent-only 480/1024 heuristics **မအစား**။
 
-3. **Do not rely on pixel-perfect design** (generic SPFx)
-   - Design for **content resilience**: longer labels, translated text, variable data.
-   - **Exception:** classic → SPFx in this repo **does** require pixel match vs `DBS-FFW-classicsite/2025/style.css`.
+3. **Pixel-perfect မယုံ** (generic SPFx)
+   - **Content resilience**: labels ပိုရှည်၊ ဘာသာပြန်စာ၊ data ကွဲပြား။
+   - **ခြွင်းချက်:** ဤ repo classic → SPFx က `DBS-FFW-classicsite/2025/style.css` နဲ့ **pixel match လို**။
 
 CSS snippet:
 ```scss
@@ -127,21 +129,21 @@ Key references:
 Guidelines:
 
 1. **Titles**
-   - Describe **purpose and outcome**, not implementation.
-   - Avoid jargon and internal project names.
-   - Good: _"External sharing overview"_ vs. Bad: _"ExtShareV2"_.
+   - **Purpose နှင့် outcome** ဖော် — implementation မဟုတ်။
+   - Jargon / internal project names ရှောင်။
+   - ကောင်း: _"External sharing overview"_ vs မကောင်း: _"ExtShareV2"_။
 
 2. **Descriptions**
-   - 1–2 sentences, present tense, user benefit first.
-   - Example: _"Track where external sharing is enabled and identify risky sites."_
+   - စာကြောင်း ၁–၂၊ present tense၊ user benefit အရင်။
+   - ဥပမာ: _"Track where external sharing is enabled and identify risky sites."_
 
 3. **Labels & commands**
-   - Use **verb-first** labels for actions: _"Filter", "Export", "Open details"_.
-   - Avoid using the same word for both state and action (e.g., "Sharing" as both a tab and a command).
+   - Actions = **verb-first**: _"Filter", "Export", "Open details"_။
+   - State နှင့် action တူသော စကားလုံး မသုံး (ဥပမာ tab နှင့် command နှစ်ခုလုံး "Sharing")။
 
 4. **Tone**
-   - Professional, direct, and neutral.
-   - Avoid blame in error text: focus on resolution.
+   - Professional, direct, neutral။
+   - Error text မှာ အပြစ်မတင် — ဖြေရှင်းချက် အာရုံ။
 
 ---
 
@@ -152,16 +154,16 @@ Reference: https://learn.microsoft.com/sharepoint/dev/design/web-part-commanding
 Principles:
 
 1. **Primary vs secondary actions**
-   - One **primary action** (button) per main surface (e.g., "New", "Configure", "Fix issues").
-   - Group secondary actions in menus when they clutter the surface.
+   - Main surface တိုင်း **primary action** တစ်ခု (ဥပမာ "New", "Configure", "Fix issues")။
+   - Surface ရှုပ်ရင် secondary actions ကို menus မှာ စု။
 
 2. **Contextual commands**
-   - Row-level actions belong near the row (action icons or contextual menu).
-   - Web-part-level actions belong in a header command bar.
+   - Row-level actions = row အနီး (action icons သို့ contextual menu)။
+   - Web-part-level actions = header command bar။
 
 3. **Selection-aware behavior**
-   - Disable or hide commands that are invalid for the current selection.
-   - Provide clear feedback when an action requires selection.
+   - လက်ရှိ selection အတွက် မမှန်သော commands disable သို့ ပုန်း။
+   - Action က selection လိုရင် feedback ရှင်း။
 
 Example command bar:
 ```tsx
@@ -191,18 +193,18 @@ Key refs:
 - Placeholders & fallbacks: https://learn.microsoft.com/sharepoint/dev/design/placeholders-and-fallbacks
 - Empty states: https://learn.microsoft.com/sharepoint/dev/design/empty-states
 
-Design **first-run** and **no-data** experiences explicitly:
+**First-run** နှင့် **no-data** experiences အတိအလင်း ဒီဇိုင်း:
 
 1. **First-run / not configured**
-   - Show **what the web part does**, **what is missing**, and a **clear next step**.
-   - Include a clear config action: _"Open configuration"_ or link to settings pane.
+   - **Web part ဘာလုပ်သလဲ**, **ဘာပျောက်သလဲ**, **next step ရှင်း** ပြ။
+   - Config action ရှင်း: _"Open configuration"_ သို့ settings pane link။
 
-2. **No data (but configured)**
-   - Acknowledge the valid state: _"No risky sites found in the last 30 days."_
-   - Offer a meaningful next step if possible: filter changes, documentation, or alternate view.
+2. **No data (configured ပြီး)**
+   - Valid state အသိအမှတ်: _"No risky sites found in the last 30 days."_
+   - ဖြစ်နိုင်ရင် meaningful next step: filter ပြောင်း၊ docs၊ alternate view။
 
 3. **Fallback content**
-   - If some data is unavailable, show **partial** content instead of blocking everything.
+   - Data တစ်စိတ်ပျောက်ရင် အားလုံး ပိတ်မည့်အစား **partial** content ပြ။
 
 Example JSX:
 ```tsx
@@ -234,19 +236,19 @@ if (!items?.length) {
 
 Reference: https://learn.microsoft.com/sharepoint/dev/design/accessibility
 
-Design decisions must support:
+Design ဆုံးဖြတ်ချက်များ ပံ့ပိုးရမည်:
 
 1. **Keyboard and focus**
-   - All interactive elements must be reachable via Tab.
-   - Visual focus indicator must be clearly visible against the background.
+   - Interactive elements အားလုံး Tab ရောက်နိုင်။
+   - Visual focus indicator နောက်ခံနဲ့ ရှင်းမြင်ရ။
 
 2. **Semantics**
-   - Use semantic elements: `<button>`, `<a>`, `<header>`, `<main>`, `<section>`, `<table>`.
-   - Use ARIA roles/labels **only when necessary** to supplement semantics.
+   - Semantic elements: `<button>`, `<a>`, `<header>`, `<main>`, `<section>`, `<table>`။
+   - Semantics ဖြည့်ရန် လိုမှသာ ARIA roles/labels။
 
 3. **Color & contrast**
-   - Do not rely on color alone to convey meaning (use icons/text as well).
-   - Respect SharePoint theme tokens and ensure WCAG AA contrast.
+   - အဓိပ္ပာယ်ကို color တစ်ခုတည်း မယုံ (icons/text တွဲ)။
+   - SharePoint theme tokens လေးစား + WCAG AA contrast။
 
 Example focus treatment (SCSS):
 ```scss
@@ -264,27 +266,27 @@ Example focus treatment (SCSS):
 
 ## 8. Performance-aware design decisions
 
-Design choices affect performance:
+Design ရွေးချယ်မှုက performance ထိ:
 
 1. **Above-the-fold clarity**
-   - Show primary summary metrics or table quickly; defer expensive details.
+   - Primary summary metrics သို့ table အမြန်ပြ; expensive details နောက်မှ။
 
 2. **Progressive rendering**
-   - Consider a **lightweight summary view** for large datasets, with explicit navigation to detail pages.
+   - ကြီးသော datasets အတွက် **lightweight summary view** + detail pages သို့ navigation အတိအလင်း။
 
 3. **Config vs default behavior**
-   - Pick safe, performant defaults (shorter time windows, scoped data) and allow power users to expand.
+   - Safe, performant defaults (time windows တို၊ scoped data); power users က ချဲ့နိုင်။
 
 ---
 
 ## 9. How to use this skill in practice
 
-When an AI editor is asked to design or adjust SPFx UX:
+AI editor ကို SPFx UX ဒီဇိုင်း/ညှိခိုင်းရင်:
 
-1. **Identify** the surface: web part vs extension, first-run vs daily use.
+1. **Identify** surface: web part vs extension, first-run vs daily use။
 2. **Apply**:
-   - Section 2–3 for structure and layout.
-   - Section 4–5 for titles, text, and commanding.
-   - Section 6–7 for states and accessibility.
-3. **Propose** concrete JSX/SCSS snippets that follow these patterns.
-4. **Check**: Is the result understandable, accessible, responsive, and performant for an enterprise tenant?
+   - Structure/layout = Section 2–3။
+   - Titles, text, commanding = Section 4–5။
+   - States နှင့် accessibility = Section 6–7။
+3. **Propose** ဤ patterns လိုက်သော JSX/SCSS snippets။
+4. **Check**: Enterprise tenant အတွက် နားလည်၊ accessible, responsive, performant လား?

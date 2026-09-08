@@ -1,68 +1,66 @@
 ---
 name: classic-to-spfx-migration
 description: >-
-  Migrate SharePoint Classic (ASPX/CEWP/JSOM/jQuery) sites to SPFx web parts and
-  extensions with pixel-level visual parity from style.css. Use when the user
-  mentions classic site migration, ASPX to SPFx, CEWP/SEWP replacement, JSOM to
-  PnPjs, Style Library scripts, DBS-FFW-classicsite pages (FFW / LFC home,
-  past-events, back-door), mapping classic scripts to React web parts,
-  bulk scaffold / all pages at once / baseline wave, or classic look
-  (font, color, spacing, hover, animation, responsive @media) not matching SPFx.
+  [MM] SharePoint Classic (ASPX/CEWP/JSOM/jQuery) ကို SPFx web parts/extensions သို့
+  style.css pixel-level visual parity ဖြင့် ပြောင်း။ Trigger: classic site migration,
+  ASPX to SPFx, CEWP/SEWP, JSOM to PnPjs, Style Library, DBS-FFW-classicsite
+  (FFW / LFC home, past-events, back-door), bulk scaffold / baseline wave,
+  classic look (font, color, spacing, hover, animation, @media) SPFx နဲ့ မတူ။
 ---
 
 # Classic Site → SPFx Migration
 
-Project-specific playbook for **DBS-FFW** classic → SPFx.
+**DBS-FFW** classic → SPFx အတွက် ပရောဂျက် playbook။
 
-## Repo layout (do not invent paths)
+## Repo layout (path မမှန်းဆရ)
 
 | Role | Path |
 |------|------|
 | Classic source | `DBS-FFW-classicsite/` — year folders `2023/` `2024/` `2025/` (`.aspx`, `style.css`, `sass/`, `public/`) |
-| Visual SoT (current) | `DBS-FFW-classicsite/2025/` (`index.aspx`, `past-events.aspx`, `style.css`, `sass/`) |
-| SPFx target | `DBS-FFW-SPFX/` (**Ffw** web part already scaffolded) |
+| Visual SoT (လက်ရှိ) | `DBS-FFW-classicsite/2025/` (`index.aspx`, `past-events.aspx`, `style.css`, `sass/`) |
+| SPFx target | `DBS-FFW-SPFX/` (**Ffw** web part scaffold ပြီး) |
 
-Do **not** treat `2023/` or `2024/` as live migrate targets unless the user names that year.
+User က year အမည်မခေါ်လျှင် `2023/` / `2024/` ကို live migrate target **မသတ်မှတ်**။
 
-## Project pins (always respect)
+## Project pins (အမြဲလိုက်နာ)
 
-Read `DBS-FFW-SPFX/package.json` before scaffolding or suggesting upgrades.
+Scaffold / upgrade မပြောမီ `DBS-FFW-SPFX/package.json` ဖတ်။
 
 | Concern | This repo |
 |---------|-----------|
 | SPFx | **1.20.x** |
-| Toolchain | **gulp** (`gulp bundle` / `gulp serve` / `gulp test`) — not Heft |
+| Toolchain | **gulp** (`gulp bundle` / `gulp serve` / `gulp test`) — Heft မဟုတ် |
 | React | **17** |
-| UI | **Fluent UI v8** (`@fluentui/react`) — not Fluent v9 unless user upgrades |
+| UI | **Fluent UI v8** (`@fluentui/react`) — user upgrade မခိုင်းလျှင် Fluent v9 မဟုတ် |
 | Node | engines in package.json (`>=18.17.1 <19.0.0`) |
 
-When loading the `spfx` skill: use **gulp** path and do **not** push Heft/Fluent v9 by default.
+`spfx` skill load သည့်အခါ **gulp** path သုံး — Heft/Fluent v9 default **မတွန်း**။
 
-**Load order (this repo):** this file (including appendix) → `classic-visual-parity` → **[visual-typography.md](./references/visual-typography.md) (required on UI migrate — typography self-check)** → `uikit-to-spfx-visual-parity` → `spfx`/`pnpjs.md` if data → a11y skill for names only. Do **not** start from `spfx-enterprise-ux-hub`. Do **not** add glassmorphism or Heft skills.
+**Load order (ဤ repo):** ဤဖိုင် (appendix အပါ) → `classic-visual-parity` → **[visual-typography.md](./references/visual-typography.md) (UI migrate မှာ required — typography self-check)** → `uikit-to-spfx-visual-parity` → data ရှိရင် `spfx`/`pnpjs.md` → a11y skill = names သာ။ `spfx-enterprise-ux-hub` မှ **မစ**။ glassmorphism / Heft skills **မထည့်**။
 
-**Bulk baseline (all pages / scaffold together):** load `bulk-classic-to-spfx-baseline` **first** + `docs/migration/PARITY.md`. Wave 1–3 = wired/baseline only; return here for Wave 4 parity slices.
+**Bulk baseline (all pages / scaffold together):** `bulk-classic-to-spfx-baseline` **အရင်** + `docs/migration/PARITY.md`။ Wave 1–3 = wired / baseline သာ; Wave 4 parity slices အတွက် ဤနေရာ ပြန်။
 
-Related skills (load only what the task needs):
+Related skills (လိုအပ်သည်သာ load):
 
-0. `bulk-classic-to-spfx-baseline` — **when user asks bulk / all WPs at once** (wired/baseline; no parity PASS)
-1. `classic-visual-parity` — **required on every UI migrate / visual tweak** (classic CSS is SoT)
-2. **[visual-typography.md](./references/visual-typography.md)** — **required on every UI migrate** — named-face `font-weight: 400`, menu link underline, typography self-check table (blocking before parity PASS)
-3. `uikit-to-spfx-visual-parity` — **required on UI migrate** so UIKit/Swiper gap/padding/margin/font-size/animation are not left behind (`style.css` alone is not enough)
-4. `swiper-to-spfx-carousel` — when slice has `.winner-slider` / `.gallery-slider` (wire init + scoped nav; not vendor bundle)
-5. `spfx` — scaffold / toolchain (do **not** follow `react-design.md` Fluent v9 / host-theme for page look)
-6. `spfx-accessibility-and-content-quality` — keyboard/focus/names only; do not restyle to Fluent
+0. `bulk-classic-to-spfx-baseline` — **user က bulk / all WPs at once တောင်းမှ** (wired / baseline; parity PASS မကြေညာ)
+1. `classic-visual-parity` — **UI migrate / visual tweak တိုင်း required** (classic CSS = SoT)
+2. **[visual-typography.md](./references/visual-typography.md)** — **UI migrate တိုင်း required** — named-face `font-weight: 400`, menu link underline, typography self-check table (parity PASS မတိုင်မီ blocking)
+3. `uikit-to-spfx-visual-parity` — **UI migrate မှာ required** — UIKit/Swiper gap/padding/margin/font-size/animation မကျန်စေ (`style.css` တစ်ခုတည်း မလုံလောက်)
+4. `swiper-to-spfx-carousel` — slice မှာ `.winner-slider` / `.gallery-slider` ရှိရင် (wire init + scoped nav; vendor bundle မဟုတ်)
+5. `spfx` — scaffold / toolchain (`react-design.md` Fluent v9 / host-theme ကို page look အတွက် **မလိုက်**)
+6. `spfx-accessibility-and-content-quality` — keyboard/focus/names သာ; Fluent သို့ restyle မလုပ်
 7. Project rules: `.cursor/rules/04-sharepoint-standards.mdc` · `17-classic-host-and-assets.mdc`
 
-This skill’s references (load with UI migrate — typography is not optional):
+ဤ skill ၏ references (UI migrate မှာ typography ကျော်မရ):
 
 - Segoe inherit / font-weight / link underline self-check → [visual-typography.md](./references/visual-typography.md) **(required)**
 - Full-width / SPA / 450px clip → [host-modes.md](./references/host-modes.md)
-- Site Pages chrome hide (only if user asks) → [site-chrome.md](./references/site-chrome.md)
+- Site Pages chrome hide (user တောင်းမှသာ) → [site-chrome.md](./references/site-chrome.md)
 - Images / CSP / remount → [siteassets-gotchas.md](./references/siteassets-gotchas.md)
 - Inventory templates → [templates/](./templates/)
-- Live inventory SoT → [docs/migration/PARITY.md](../../../docs/migration/PARITY.md) (sync with `progress.md`)
+- Live inventory SoT → [docs/migration/PARITY.md](../../../docs/migration/PARITY.md) (`progress.md` နဲ့ sync)
 
-Do **not** apply a glassmorphism look or treat Fluent density / theme slots as the visual target. Do **not** load a second playbook named `classic-spfx-migration`.
+glassmorphism look / Fluent density / theme slots ကို visual target **မသတ်**။ `classic-spfx-migration` အမည်ရှိ ဒုတိယ playbook **မload**။
 
 ## Workflow
 
@@ -71,75 +69,75 @@ Do **not** apply a glassmorphism look or treat Fluent density / theme slots as t
 | Wave | Skill | Status |
 |------|-------|--------|
 | PREP + bulk scaffold + baseline + host | `bulk-classic-to-spfx-baseline` | wired / baseline |
-| Parity per slice | this file + `classic-visual-parity` + `visual-typography` self-check | parity PASS |
+| Parity per slice | ဤဖိုင် + `classic-visual-parity` + `visual-typography` self-check | parity PASS |
 
-One PR for Wave 0–3 is OK when user explicitly requests bulk baseline. **Parity PASS** stays feature-by-feature.
+User က bulk baseline အတိအလင်း တောင်းရင် Wave 0–3 တစ် PR OK။ **Parity PASS** = feature-by-feature။
 
 ### 1) Inventory classic surface
 
-Scan `DBS-FFW-classicsite/2025/` and sync [docs/migration/PARITY.md](../../../docs/migration/PARITY.md):
+`DBS-FFW-classicsite/2025/` စစ်ပြီး [docs/migration/PARITY.md](../../../docs/migration/PARITY.md) sync:
 
 - Live pages: `2025/index.aspx`, `2025/past-events.aspx`
 - Admin / defer: `2025/back-door.aspx`
-- Shared chrome: **inline** in each ASPX (`header.page-banner`) — no `components/header.aspx`
-- Visual CSS: `2025/style.css` (compiled SoT), `2025/sass/` (`style.sass`, `_home`, `_fonts`), UIKit + Swiper + hamburgers classes the ASPX actually uses
+- Shared chrome: ASPX တိုင်း **inline** (`header.page-banner`) — `components/header.aspx` မရှိ
+- Visual CSS: `2025/style.css` (compiled SoT), `2025/sass/` (`style.sass`, `_home`, `_fonts`), ASPX က သုံးသည့် UIKit + Swiper + hamburgers classes
 - Scripts: `2025/public/js/controller/indexController.js`, `indexControllerPastEvent.js`, `winnerController.js`, `home.js`, `common.js`, `lib/common-lib.js`, `lib/lib.js`
 - SP helpers: `2025/public/js/spbase/sprestlib-php.js`, `config.js`, `jquery.SPServices.min.js`
 - Vendors: jQuery, UIKit (`public/css/vendor/uikit.min.css`, `public/js/vendor/uikit.min.js`), Swiper, FullCalendar (`index.global*.js`), lottie, anime, ical, papaparse, moment
 - Data JSON: `events.json`, `events-current.json`, `post-event.json`, `participants.json`, `winnerlists.json`
-- Cut / defer: `2024/index-old.aspx`, `2024/index-current.aspx`, `2023/clickr-test.aspx`, `*-bk.js` / `testController.js`; prior-year trees unless user names them
+- Cut / defer: `2024/index-old.aspx`, `2024/index-current.aspx`, `2023/clickr-test.aspx`, `*-bk.js` / `testController.js`; user မခေါ်လျှင် prior-year trees
 
-Classify each feature as:
+Feature တိုင်း ခွဲ:
 
 | Target | When |
 |--------|------|
 | **Web Part** | Page body / list UI / feature island |
 | **Application Customizer** | Header/footer/chrome across pages |
-| **Command Set / Field Customizer** | List toolbar or field render |
-| **Stay list/out-of-box** | No custom code needed |
-| **Defer / cut** | Dead pages (`*-old.aspx`, test pages) or unused scripts |
+| **Command Set / Field Customizer** | List toolbar သို့ field render |
+| **Stay list/out-of-box** | custom code မလို |
+| **Defer / cut** | Dead pages (`*-old.aspx`, test pages) သို့ unused scripts |
 
-Do not edit Classic master pages / `_layouts` system files. Prefer Site Assets / Style Library patterns already in repo.
+Classic master pages / `_layouts` system files **မပြင်**။ Repo ထဲရှိ Site Assets / Style Library ပုံစံ ဦးစားပေး။
 
 ### 2) Map data access
 
-Classic patterns in this repo → SPFx:
+ဤ repo classic → SPFx:
 
 | Classic | SPFx |
 |---------|------|
-| `loadJson('events.json')` / participants / winnerlists | Fetch from SiteAssets / property-pane URL, or bundle small JSON — **ask before** changing source |
-| jQuery / SPServices / string REST | PnPjs (`@pnp/sp`) preferred, or existing `SPHttpClient` |
-| Hardcoded list URLs in controllers | Service module + configurable list titles/IDs via property pane |
-| Writes without digest awareness | PnPjs handles digest; raw REST needs `X-RequestDigest` |
-| CAML/SQL string concat | Typed filters / parameterized queries only |
+| `loadJson('events.json')` / participants / winnerlists | SiteAssets / property-pane URL မှ fetch၊ သို့ small JSON bundle — source ပြောင်းမည်ဆို **အရင်မေး** |
+| jQuery / SPServices / string REST | PnPjs (`@pnp/sp`) ဦးစားပေး၊ သို့ ရှိပြီး `SPHttpClient` |
+| Controllers ထဲ hardcoded list URLs | Service module + property pane မှ list titles/IDs |
+| Digest မသိသော writes | PnPjs က digest ကိုင်; raw REST = `X-RequestDigest` လို |
+| CAML/SQL string concat | Typed filters / parameterized queries သာ |
 
-AuthZ: check list/item permissions — AuthN success is not enough (IDOR).
+AuthZ: list/item permissions စစ် — AuthN အောင်ရုံ မလုံလောက် (IDOR)။
 
-XSS: never port CEWP/SEWP raw HTML into `dangerouslySetInnerHTML` without sanitize.
+XSS: sanitize မပါဘဲ CEWP/SEWP raw HTML ကို `dangerouslySetInnerHTML` ထဲ **မပို့**။
 
-This site lists/fields/i18n/PHP map = **This site appendix** below — do not invent extra lists.
+ဤ site lists/fields/i18n/PHP map = အောက် **This site appendix** — extra lists မတီထွင်။
 
 ### 3) Map UI + visual parity (blocking)
 
-- Port feature UI into React web part components under `DBS-FFW-SPFX/src/webparts/...`
-- Replace jQuery DOM hacks with React state; keep SharePoint chrome selectors untouched
-- Empty / loading / error states required for list-driven UIs (copy classic empty copy/spacing if the classic page has them)
-- **Visual SoT** = that slice’s year `style.css` (+ `sass/` + ASPX / used UIKit + Swiper). Load `classic-visual-parity` **before** writing SCSS; run [visual-typography.md](./references/visual-typography.md) **self-check before parity PASS**
-- Style with `*.module.scss`. Fluent v8 controls only where classic had a comparable control — **do not** replace classic type/color/spacing with Fluent tokens
-- Do not add Tailwind/SPA routers
-- Mandatory clone (skip none): font-size, font-weight, font color, BG color, spacing, Gap, margin, padding, break line, letter spacing, line height, hover effect, animation effect, responsive `@media` (classic breakpoint px — not Fluent-only 480/1024)
-- A slice is not migrated until those match classic at **each** classic breakpoint used by that page
+- Feature UI ကို `DBS-FFW-SPFX/src/webparts/...` React web part components ထဲ ပို့
+- jQuery DOM hacks → React state; SharePoint chrome selectors မထိ
+- List-driven UI = empty / loading / error states မဖြစ်မနေ (classic page မှာ ရှိရင် copy/spacing ကူး)
+- **Visual SoT** = ထို slice ၏ year `style.css` (+ `sass/` + ASPX / သုံးသည့် UIKit + Swiper)။ SCSS မရေးမီ `classic-visual-parity` load; [visual-typography.md](./references/visual-typography.md) **self-check before parity PASS**
+- `*.module.scss` ဖြင့် style။ Classic မှာ ယှဉ်နိုင်သော control ရှိမှ Fluent v8 — classic type/color/spacing ကို Fluent tokens **မအစား**
+- Tailwind / SPA routers **မထည့်**
+- မဖြစ်မနေ clone (ကျော်မရ): font-size, font-weight, font color, BG color, spacing, Gap, margin, padding, break line, letter spacing, line height, hover effect, animation effect, responsive `@media` (classic breakpoint px — Fluent-only 480/1024 မဟုတ်)
+- ထို page သုံးသည့် classic breakpoint **တိုင်း** မှာ classic နဲ့ တူမှ slice migrated ဟု သတ်
 
 ### 4) Implement in SPFx target only
 
-- New code lands in `DBS-FFW-SPFX/` unless user asks to change classic for parity testing
-- Keep web part thin; put REST/Graph/JSON loaders in services
-- Property pane for JSON/asset URLs, page URLs, feature flags
-- Packaging: preserve `config/package-solution.json` patterns; no secrets/tenant IDs hard-coded
+- ကုဒ်အသစ် = `DBS-FFW-SPFX/` — user က classic ပြင်ခိုင်းမှ parity testing အတွက် classic ပြင်
+- Web part ပါးအောင်ထား; REST/Graph/JSON loaders = services
+- Property pane = JSON/asset URLs, page URLs, feature flags
+- Packaging: `config/package-solution.json` ပုံစံ ထိန်း; secrets/tenant IDs hard-code မလုပ်
 
 ### 5) Validate
 
-Per Testing Gate:
+Testing Gate အတိုင်း:
 
 ```bash
 cd DBS-FFW-SPFX
@@ -147,54 +145,54 @@ gulp bundle
 gulp test   # if present / meaningful
 ```
 
-Manual smoke (workbench or served page):
+Manual smoke (workbench သို့ served page):
 
-1. Script/web part loads without console errors
-2. JSON / list read succeeds for permitted user
-3. Write path (if any) succeeds + fails cleanly without permission
-4. Keyboard focus + control names on interactive controls
-5. **Visual vs classic (blocking):** font-size, font-weight, font color, BG color, spacing, Gap, margin, padding, break line, letter spacing, line height, hover effect, animation effect, responsive `@media` (same classic widths; stack/wrap/hide)
+1. Script/web part console errors မရှိ load
+2. ခွင့်ရှိ user အတွက် JSON / list read အောင်
+3. Write path (ရှိရင်) အောင် + permission မရှိရင် သန့်စင် fail
+4. Interactive controls မှာ keyboard focus + control names
+5. **Visual vs classic (blocking):** font-size, font-weight, font color, BG color, spacing, Gap, margin, padding, break line, letter spacing, line height, hover effect, animation effect, responsive `@media` (classic widths တူ; stack/wrap/hide)
 
 ## Anti-patterns
 
-- Suggesting Heft toolchain or Fluent v9 while project is on SPFx 1.20 / Fluent v8
-- Rewriting the entire classic site in one PR **for parity PASS** — use `bulk-classic-to-spfx-baseline` for scaffold/baseline only; parity stays feature-by-feature
-- Copying vendor minified bundles into SPFx when Fluent/PnP covers the need (ask before new deps)
-- Installing packages to `~/.cursor/skills` or user-global skills
-- Mixing React (web) generic app patterns that ignore SPFx host lifecycle
-- Shipping Fluent / theme-token / glassmorphism look instead of classic `style.css`
-- Calling a migrate done when data works but type, color, spacing, hover, animation, or responsive `@media` still differ from classic
-- Porting `2023/clickr-test.aspx` / `*-old.aspx` / `testController.js` as live features
-- Scaffolding a separate WP per year folder unless the user asks
+- SPFx 1.20 / Fluent v8 မှာ Heft သို့ Fluent v9 အကြံပေး
+- တစ် PR မှာ classic site အားလုံး **parity PASS** အတွက် ပြန်ရေး — scaffold/baseline သာ `bulk-classic-to-spfx-baseline`; parity = feature-by-feature
+- Fluent/PnP က ဖုံးနိုင်သေး vendor minified bundles ကို SPFx ထဲ ကူး (deps အသစ် = အရင်မေး)
+- `~/.cursor/skills` သို့ user-global skills မှာ packages install
+- SPFx host lifecycle ကို လျစ်လျူရှုသော React (web) generic app patterns
+- classic `style.css` အစား Fluent / theme-token / glassmorphism look ပို့
+- Data အလုပ်လုပ်ရုံနဲ့ migrate ပြီးဟု ကြေညာ — type, color, spacing, hover, animation, `@media` classic နဲ့ ကွာနေသေးရင် မပြီး
+- `2023/clickr-test.aspx` / `*-old.aspx` / `testController.js` ကို live features အဖြစ် ပို့
+- User မတောင်းဘဲ year folder တိုင်း သီးခြား WP scaffold
 
 ## Output expectations
 
-When asked to migrate, respond with:
+Migrate တောင်းရင် ပြန်ဖြေ:
 
-1. Inventory summary (pages/scripts → target type) + CSS sources (`2025/style.css` / `sass/` / used UIKit+Swiper)
-2. Selected Path for this slice (one feature)
-3. Visual token table (mandatory rows from `classic-visual-parity`)
-4. Files to add/change under `DBS-FFW-SPFX/`
-5. Validation commands + manual smoke checklist (including visual parity rows)
+1. Inventory summary (pages/scripts → target type) + CSS sources (`2025/style.css` / `sass/` / သုံးသည့် UIKit+Swiper)
+2. ဤ slice အတွက် Selected Path (feature တစ်ခု)
+3. Visual token table (`classic-visual-parity` mandatory rows)
+4. `DBS-FFW-SPFX/` တွင် ထည့်/ပြင်မည့် ဖိုင်များ
+5. Validation commands + manual smoke checklist (visual parity rows အပါ)
 
 ## This site appendix (DBS-FFW-classicsite)
 
-Do not invent lists, fields, or languages. Do not port dead scripts or `config.js` debug dumps.
+Lists, fields, languages မတီထွင်။ Dead scripts / `config.js` debug dumps မပို့။
 
 ### Suggested web part map
 
 | Classic surface | Script(s) | SPFx target |
 |-----------------|-----------|-------------|
-| `2025/index.aspx` | `indexController.js`, `winnerController.js`, `home.js`, `common.js` | Web Part **Ffw** (exists) |
+| `2025/index.aspx` | `indexController.js`, `winnerController.js`, `home.js`, `common.js` | Web Part **Ffw** (ရှိပြီး) |
 | `2025/past-events.aspx` | `indexControllerPastEvent.js` | Web Part **PastEvents** / scaffold |
 | `2025/back-door.aspx` | inline admin date override | Web Part **BackDoor** / defer |
-| Inline `header.page-banner` | — | stay in-page (Application Customizer later only if user asks) |
+| Inline `header.page-banner` | — | in-page ထား (Application Customizer = user တောင်းမှ နောက်မှ) |
 | `2024/*`, `2023/*` | prior-year copies | cut / defer unless user names that year |
 | `2024/index-old.aspx`, `2023/clickr-test.aspx` | — | cut |
 
 ### Data (property pane — defaults)
 
-Primary data plane is **year JSON next to the ASPX**, not InsightsBank-style SharePoint lists. Do not invent list titles.
+Primary data plane = **ASPX ဘေး year JSON** — InsightsBank-style SharePoint lists မဟုတ်။ List titles မတီထွင်။
 
 | Use | Classic source |
 |---|---|
@@ -203,26 +201,26 @@ Primary data plane is **year JSON next to the ASPX**, not InsightsBank-style Sha
 | Participants | `2025/participants.json` |
 | Winners | `2025/winnerlists.json` |
 
-`sprLibPhp` (`public/js/spbase/sprestlib-php.js`) + `CommonLib` exist for optional SP list CRUD. SPFx: typed object via PnPjs (`@pnp/sp`) — **ask before adding the package**. Do not call PHP `db.php`. Do not copy `config.baseSpUrl`; use `this.context.pageContext.web`. Read the slice’s script before inventing columns or list names.
+`sprLibPhp` (`public/js/spbase/sprestlib-php.js`) + `CommonLib` = optional SP list CRUD။ SPFx: PnPjs (`@pnp/sp`) typed object — **package မထည့်မီ မေး**။ PHP `db.php` **မခေါ်**။ `config.baseSpUrl` **မကူး** — `this.context.pageContext.web` သုံး။ Columns/list names မတီထွင်မီ slice script ဖတ်။
 
 | Classic | SPFx |
 |---|---|
-| `commonLib.loadJson('events.json')` | `SPHttpClient` / fetch from SiteAssets or property-pane URL |
-| `sprLibPhp.items` / `itemsCAML` | PnP `items.filter(...).orderBy(...).top(n)` — do not copy `queryLimit: 5000` as the default page size |
+| `commonLib.loadJson('events.json')` | `SPHttpClient` / SiteAssets သို့ property-pane URL မှ fetch |
+| `sprLibPhp.items` / `itemsCAML` | PnP `items.filter(...).orderBy(...).top(n)` — `queryLimit: 5000` ကို default page size **မကူး** |
 | `sprLibPhp.create` / `update` | `items.add({ ... })` / `items.getById(id).update({ ... })` |
-| Current user helper | `pageContext.user` (+ profile only if extra fields are required) |
+| Current user helper | `pageContext.user` (extra fields လိုမှသာ profile) |
 
-Do not assume dbs-Insights-Bank / project-saral / change-management-learning field names.
+dbs-Insights-Bank / project-saral / change-management-learning field names **မယူဆ**။
 
 ### i18n
 
-No locale folder copies (`zh/` `sc/` `id/`) in this classic tree. Port page copy via SPFx `loc/` only if a slice actually has translations.
+ဤ classic tree မှာ locale folder copies (`zh/` `sc/` `id/`) မရှိ။ Slice မှာ translations အစစ်ရှိမှသာ SPFx `loc/` ဖြင့် page copy ပို့။
 
 ### Do not port
 
 - `2023/clickr-test.aspx`, `2024/index-old.aspx`, `testController.js`, `indexController-bk.js`
 - `config.js` `console.log` / `userStaticDebug` / `userStaticProfile` dumps
-- Hardcoded `/sites/ClassicSite/dbs-ffw` (use `pageContext`)
+- Hardcoded `/sites/ClassicSite/dbs-ffw` (`pageContext` သုံး)
 - Vendor minified jQuery / UIKit / Swiper / FullCalendar / SPServices bundles as-is
 
-`DBS-FFW-SPFX/` already has the **Ffw** web part. Confirm `package.json` pins before suggesting upgrades. `config/serve.json` `initialPage` must be the real workbench/site URL before `gulp serve` against the tenant.
+`DBS-FFW-SPFX/` မှာ **Ffw** web part ရှိပြီး။ Upgrade မပြောမီ `package.json` pins အတည်ပြု။ Tenant သို့ `gulp serve` မတိုင်မီ `config/serve.json` `initialPage` = အစစ် workbench/site URL။

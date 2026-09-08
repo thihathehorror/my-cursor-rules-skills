@@ -1,49 +1,48 @@
 ---
 name: bulk-classic-to-spfx-baseline
 description: >-
-  Bulk scaffold multiple classic ASPX pages into separate SPFx web parts in one
-  wave — wired/baseline only, parity later. Use when the user asks to convert
-  all pages at once, bulk scaffold, baseline wave, or wire multiple web parts
-  together without claiming visual PASS. DBS-FFW only; no hub pageKey router.
+  [MM] Classic ASPX စာမျက်နှာများစွာကို SPFx web parts သီးခြား scaffold —
+  wired/baseline သာ၊ parity နောက်မှ။ Trigger: all pages at once, bulk scaffold,
+  baseline wave, visual PASS မကြေညာဘဲ WPs တွဲ wire။ DBS-FFW သာ; hub pageKey router မသုံး။
 ---
 
 # Bulk Classic → SPFx Baseline (DBS-FFW)
 
-Fast **wire-first** wave adapted from Clickr `mk` playbook — **without** hub router or mk chat/behavior rules.
+Clickr `mk` playbook မှ **wire-first** wave — hub router / mk chat/behavior rules **မပါ**။
 
 ## When to load
 
 | Load | Skip |
 |------|------|
-| User asks bulk / all pages / all web parts at once / baseline wave / scaffold together | Single-slice visual parity tweak only |
-| Re-scaffold cut WPs (PastEvents, BackDoor) as stubs | Hub `pageKey` router (rejected in rule 17) |
-| Inventory + manifest + serve.json for all live routes | Claiming parity PASS in the same wave |
+| User က bulk / all pages / all web parts at once / baseline wave / scaffold together | Single-slice visual parity tweak သာ |
+| Cut WPs (PastEvents, BackDoor) ကို stubs အဖြစ် re-scaffold | Hub `pageKey` router (rule 17 ငြင်း) |
+| Live routes အားလုံးအတွက် inventory + manifest + serve.json | ထို wave ထဲ parity PASS ကြေညာ |
 
-**Load order:** `docs/migration/PARITY.md` → this skill → `classic-to-spfx-migration` (appendix) → `spfx`/`create.md` for Yeoman patterns → parity skills **not** required until Wave 3.
+**Load order:** `docs/migration/PARITY.md` → ဤ skill → `classic-to-spfx-migration` (appendix) → Yeoman patterns အတွက် `spfx`/`create.md` → Wave 3 မတိုင်မီ parity skills **မလို**။
 
-## Hard rejects (same as main migration)
+## Hard rejects (main migration နဲ့တူ)
 
-- Hub web part + `pageKey` router (one WP per classic page only)
-- Heft / Fluent v9 while on SPFx 1.20 / Fluent v8
-- New npm packages without user approval
-- Marking **parity PASS** or Visual PASS during baseline wave
-- Porting `2023/clickr-test.aspx` / `*-old.aspx` / prior-year trees unless user names them
+- Hub web part + `pageKey` router (classic page တစ်ခု = WP တစ်ခုသာ)
+- SPFx 1.20 / Fluent v8 မှာ Heft / Fluent v9
+- User approval မရှိ npm packages အသစ်
+- Baseline wave အတွင်း **parity PASS** သို့ Visual PASS ကြေညာ
+- `2023/clickr-test.aspx` / `*-old.aspx` / prior-year trees — user မခေါ်လျှင် မပို့
 - Hardcoded tenant/site URLs
-- Embedding full vendor minified jQuery/UIKit/Swiper/FullCalendar bundles in sppkg
+- sppkg ထဲ vendor minified jQuery/UIKit/Swiper/FullCalendar bundles အပြည့်ထည့်
 
-## Wave order (do not skip)
+## Wave order (ကျော်မရ)
 
 | Wave | Goal | Status allowed |
 |------|------|----------------|
-| **0 PREP** | Sync `docs/migration/PARITY.md` + `progress.md` | inventory only |
-| **1 SCAFFOLD** | Yeoman-style WP folders for every **live** route in PARITY table | inventory → wired |
+| **0 PREP** | `docs/migration/PARITY.md` + `progress.md` sync | inventory only |
+| **1 SCAFFOLD** | PARITY table ရှိ **live** route တိုင်း Yeoman-style WP folders | inventory → wired |
 | **2 BASELINE** | Thin React shell + shared classic SCSS hook + manifest `supportsFullBleed` + `config.json` + `serve.json` | **wired / baseline** |
-| **3 HOST** | Per-WP full-width unlock if canvas clips — [host-modes.md](../classic-to-spfx-migration/references/host-modes.md) | wired / baseline |
+| **3 HOST** | Canvas clip ရင် per-WP full-width unlock — [host-modes.md](../classic-to-spfx-migration/references/host-modes.md) | wired / baseline |
 | **4 PARITY** | **Separate slices** — `classic-visual-parity` + [visual-typography.md](../classic-to-spfx-migration/references/visual-typography.md) self-check + `uikit-to-spfx-visual-parity` | parity PASS |
 
-Wave 1–3 may land in **one PR** when user explicitly requests bulk baseline. Wave 4 stays **feature-by-feature**.
+User က bulk baseline အတိအလင်း တောင်းရင် Wave 1–3 **တစ် PR** ဖြစ်နိုင်။ Wave 4 = **feature-by-feature**။
 
-## Architecture (this repo)
+## Architecture (ဤ repo)
 
 ```
 Classic ASPX (one page)  →  SPFx Web Part (one WP)  →  optional SPA host per page
@@ -52,40 +51,40 @@ NOT: one hub WP + pageKey router
 
 | Classic | SPFx target | Notes |
 |---------|-------------|-------|
-| `2025/index.aspx` | **Ffw** | exists |
-| `2025/past-events.aspx` | **PastEvents** | scaffold if in scope |
-| `2025/back-door.aspx` | **BackDoor** | defer unless user asks |
+| `2025/index.aspx` | **Ffw** | ရှိပြီး |
+| `2025/past-events.aspx` | **PastEvents** | scope ထဲရှိရင် scaffold |
+| `2025/back-door.aspx` | **BackDoor** | user တောင်းမှ; မဟုတ်ရင် defer |
 
-## Wave 1 — Scaffold checklist (per WP)
+## Wave 1 — Scaffold checklist (WP တိုင်း)
 
-Under `DBS-FFW-SPFX/src/webparts/<Name>/`:
+`DBS-FFW-SPFX/src/webparts/<Name>/` အောက်:
 
 - `<Name>WebPart.ts` + `.manifest.json` (`supportsFullBleed: true`, `SharePointWebPart` + `SharePointFullPage`)
 - `components/<Name>.tsx` + `I<Name>Props.ts`
-- `components/<Name>.module.scss` (host isolation only in baseline)
+- `components/<Name>.module.scss` (baseline မှာ host isolation သာ)
 - `loc/en-us.js` + `mystrings.d.ts`
-- Register in `config/config.json` bundles
-- Add `config/serve.json` entry pointing at tenant page with `debug=true&noredir=true`
+- `config/config.json` bundles မှာ register
+- `config/serve.json` entry — tenant page + `debug=true&noredir=true`
 
-Copy patterns from the existing **Ffw** web part — do not invent new architecture.
+ရှိပြီး **Ffw** web part ပုံစံ ကူး — architecture အသစ် မတီထွင်။
 
 ## Wave 2 — Baseline content (minimal)
 
-Goal: page loads without console errors; classic **look** may FAIL.
+ပန်းတိုင်: page load + console errors မရှိ; classic **look** FAIL နိုင်။
 
-1. Root wrapper class matching classic page root (e.g. FFW home root from `2025/index.aspx`)
-2. Import shared classic tokens via existing `src/shared/styles/classicGlobal.scss` (or equivalent) — do **not** paste full `uikit.min.css`
-3. Placeholder structure for main regions (header area optional; body sections stubbed)
-4. Data: read-only smoke only OR static placeholder — full JSON/PnP port is Wave 4
-5. Property pane: JSON/asset URL defaults from `classic-to-spfx-migration` appendix (`events.json`, etc.)
+1. Classic page root နဲ့ ကိုက်သော root wrapper class (ဥပမာ `2025/index.aspx` FFW home root)
+2. ရှိပြီး `src/shared/styles/classicGlobal.scss` (သို့ ညီမျှ) မှ shared classic tokens import — `uikit.min.css` အပြည့် **မကူး**
+3. Main regions placeholder (header optional; body sections stub)
+4. Data: read-only smoke သို့ static placeholder — full JSON/PnP port = Wave 4
+5. Property pane: `classic-to-spfx-migration` appendix defaults (`events.json` စသည်)
 
 ## Wave 3 — Host
 
-Per WP that needs full classic width:
+Classic full width လိုသော WP တိုင်း:
 
-- Full-width section on modern page
-- Ancestor unlock (width + height/overflow) per [host-modes.md](../classic-to-spfx-migration/references/host-modes.md)
-- Document host mode in `docs/migration/SITEASSETS.md`
+- Modern page မှာ full-width section
+- Ancestor unlock (width + height/overflow) — [host-modes.md](../classic-to-spfx-migration/references/host-modes.md)
+- Host mode ကို `docs/migration/SITEASSETS.md` မှာ မှတ်
 
 ## Validation (baseline wave)
 
@@ -95,27 +94,27 @@ gulp bundle
 gulp test   # if meaningful
 ```
 
-Smoke (all WPs in scope):
+Smoke (scope ထဲ WP အားလုံး):
 
-1. Each WP loads on workbench or served tenant page — no console errors
-2. `supportsFullBleed` manifest present
-3. Root layout visible (stub OK)
-4. **Do not** block on visual parity checklist
+1. Workbench သို့ served tenant page မှာ WP တိုင်း load — console errors မရှိ
+2. `supportsFullBleed` manifest ရှိ
+3. Root layout မြင်ရ (stub OK)
+4. Visual parity checklist ကြောင့် **မပိတ်**
 
-Update `docs/migration/PARITY.md` Status column and sync `progress.md`.
+`docs/migration/PARITY.md` Status column ပြင်ပြီး `progress.md` sync။
 
 ## Output expectations (bulk wave)
 
 1. PARITY table diff (before → after Status)
-2. List of WPs scaffolded vs already present
-3. Files added under `DBS-FFW-SPFX/`
-4. `gulp bundle` result
-5. Explicit note: **wired/baseline only — parity PASS deferred to Wave 4 slices**
+2. Scaffold ထားသော WPs vs ရှိပြီးသား
+3. `DBS-FFW-SPFX/` တွင် ထည့်သည့် ဖိုင်များ
+4. `gulp bundle` ရလဒ်
+5. ကြေညာချက်: **wired / baseline only — parity PASS deferred to Wave 4 slices**
 
 ## Anti-patterns
 
-- Using this skill to skip Wave 4 forever
-- One mega React file routing all pages (hub pattern)
-- Fluent redesign instead of classic SCSS hook
-- Declaring migration complete after baseline
-- Bulk parity PASS in one agent turn (context + quality bar — split slices)
+- ဤ skill ဖြင့် Wave 4 ကို အမြဲကျော်
+- စာမျက်နှာအားလုံး route လုပ်သော mega React ဖိုင်တစ်ခု (hub pattern)
+- Classic SCSS hook အစား Fluent redesign
+- Baseline ပြီးရုံနဲ့ migration complete ကြေညာ
+- Agent turn တစ်ခုမှာ bulk parity PASS (context + quality bar — slices ခွဲ)

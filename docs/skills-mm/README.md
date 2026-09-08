@@ -1,17 +1,17 @@
 ---
-description: "[MM] `_cursor/skills/` Myanmar docs index — deploy မဟုတ်"
+description: "[MM] `_cursor/skills/` Myanmar docs index"
 source: _cursor/skills/
 ---
 
 # Skills (မြန်မာဘာသာ)
 
-ဤ folder = `_cursor/skills/` ၏ **docs ဘာသာပြန်** သာ။ Agent runtime / deploy copy source **မဟုတ်**။
+ဤ folder = `_cursor/skills/` ၏ **docs mirror** (`source:` frontmatter ပါ)။ Deploy copy source = `_cursor/skills/`။
 
 | | |
 |---|---|
-| Runtime SoT (English) | `_cursor/skills/` |
+| Runtime SoT (Myanmar prose) | `_cursor/skills/` |
 | Deploy | `cp -R _cursor/ /path/to/PROJECT/.cursor/` |
-| ဤနေရာ | ဖတ်ရှုရန် Myanmar ပြန် |
+| ဤနေရာ | ဖတ်ရှုရန် docs mirror |
 
 `name` / path / command / Status token (`parity PASS`, `wired / baseline`) / code = **English**။ Prose = မြန်မာ။
 
