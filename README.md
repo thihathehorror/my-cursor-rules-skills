@@ -1,6 +1,6 @@
 # my-rules-skills-and-others
 
-Gold-standard Cursor agent pack — synced from **DBS-FFW** (2026-08-31).
+Gold-standard Cursor agent pack — synced from **DBS-FFW** (2026-08-31), plus Codegraph ensure/autosync hooks.
 
 ## Purpose
 
@@ -12,17 +12,18 @@ Gold-standard Cursor agent pack — synced from **DBS-FFW** (2026-08-31).
 
 | Path | Description |
 |------|-------------|
-| `_cursor/rules/` | 15 active rules (+ 5 archived dead stacks) |
-| `_cursor/skills/` | 17 skills (Myanmar prose; `name` / paths / Status tokens stay English) |
-| `_cursor/hooks/` | sessionStart + preCompact + stop handoff loop |
-| `_cursor/hooks.json` | Hook event wiring |
-| `_cursor/mcp.json` | Codegraph MCP (`codegraph` + `${workspaceFolder}`) |
+| `.cursor/rules/` | 15 active rules (+ archived dead stacks) |
+| `.cursor/skills/` | 17 skills (Myanmar prose; `name` / paths / Status tokens stay English) |
+| `.cursor/hooks/` | SoT sessionStart · ensure-codegraph · codegraph-autosync · preCompact · stop handoff |
+| `.cursor/hooks.json` | Hook event wiring (`sessionStart`, `afterFileEdit`, `preCompact`, `stop`) |
+| `.cursor/mcp.json` | Codegraph MCP (`codegraph` + `${workspaceFolder}`) |
+| `.codegraph/.gitignore` | Keep index local — do not commit `codegraph.db` |
 | `active_context.md` | DBS-FFW handoff example (Goal · Pins · DONE · NEXT · paste block) |
 | `progress.md` | DBS-FFW slice inventory + suggested order |
 | `codegraph.json` | DBS-FFW index excludes (retarget per project) |
 | `docs/migration/` | PARITY · SITEASSETS · SITE_CHROME templates |
-| `docs/rules-mm/` | Myanmar translation of `_cursor/rules/` (docs only) |
-| `docs/skills-mm/` | Myanmar docs mirror of `_cursor/skills/` (`source:` frontmatter; not a second copy source) |
+| `docs/rules-mm/` | Myanmar translation of `.cursor/rules/` (docs only) |
+| `docs/skills-mm/` | Myanmar docs mirror of `.cursor/skills/` (`source:` frontmatter; not a second copy source) |
 
 ## Pins (all classic → SPFx projects)
 
@@ -32,27 +33,32 @@ Gold-standard Cursor agent pack — synced from **DBS-FFW** (2026-08-31).
 | Toolchain | gulp (not Heft) |
 | React | 17 |
 | UI | Fluent UI v8 |
-| Reject | Heft/v9, classic master, secrets in chat, Codegraph Cursor hooks |
+| Reject | Heft/v9, classic master, secrets in chat |
+
+## Codegraph hooks
+
+| Hook | When | Role |
+|------|------|------|
+| `ensure-codegraph.sh` | `sessionStart` | `codegraph init` if `.codegraph/codegraph.db` missing (fail-open) |
+| `codegraph-autosync.py` | `sessionStart` + `afterFileEdit` | Quiet `codegraph sync -q` (debounced, fail-open) |
+
+- Sync root defaults to **workspace root** (uses root `codegraph.json` excludes).
+- Optional: `CODEGRAPH_SYNC_ROOTS=DBS-FFW-SPFX,Other-SPFX` for multi-root sync.
+- This pack repo itself has little/no app source — real index DB appears after deploy + `codegraph` CLI on a target project.
 
 ## Deploy to a new project
 
 1. Copy pack into project root:
    ```bash
-   cp -R my-rules-skills-and-others/_cursor/ /path/to/PROJECT/.cursor/
+   cp -R my-cursor-rules-skills/.cursor/ /path/to/PROJECT/.cursor/
+   cp my-cursor-rules-skills/codegraph.json /path/to/PROJECT/
+   mkdir -p /path/to/PROJECT/.codegraph && cp my-cursor-rules-skills/.codegraph/.gitignore /path/to/PROJECT/.codegraph/
    ```
 2. **Retarget paths** in rules `06`, `07`, `15`–`19`, `12` and skills (`classic-to-spfx-migration`, `classic-visual-parity`, etc.)
 3. Copy `docs/migration/` and rewrite `PARITY.md` for that site's routes
 4. Create project-specific `active_context.md` + `progress.md` (use DBS-FFW files here as format reference)
-5. Copy `codegraph.json` and adjust `exclude` for `{PROJECT}-classicsite/` and `{PROJECT}-SPFX/`
-6. Run `codegraph init` in the project workspace root
-
-## `_cursor` vs `.cursor`
-
-This repo uses **`_cursor/`** so Cursor does **not** auto-load rules when the monorepo root is open.
-
-Real migration projects use **`.cursor/`**. After deploy, `hooks.json` paths (`.cursor/hooks/...`) match the live folder name.
-
-**Do not** open `my-rules-skills-and-others` alone as your Cursor workspace for migration work — deploy to the target project first.
+5. Adjust `codegraph.json` `exclude` for `{PROJECT}-classicsite/` and `{PROJECT}-SPFX/`
+6. Ensure `codegraph` CLI is on PATH; open the project in Cursor — `ensure-codegraph` + autosync will init/sync, or run `codegraph init` once manually
 
 ## Active rules (15)
 
@@ -74,7 +80,7 @@ Real migration projects use **`.cursor/`**. After deploy, `hooks.json` paths (`.
 | `18-bulk-migration-baseline` | Bulk wired/baseline wave (glob) |
 | `19-migration-skill-auto-invoke` | Prompt → skill routing (always-on) |
 
-Archived (inactive): WordPress, Laravel, FastAPI, Flutter, Express → `_cursor/rules/archive/`
+Archived (inactive): WordPress, Laravel, FastAPI, Flutter, Express → `.cursor/rules/archive/`
 
 ## Sync source
 

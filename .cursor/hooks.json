@@ -4,6 +4,17 @@
     "sessionStart": [
       {
         "command": ".cursor/hooks/session-start-sot.py"
+      },
+      {
+        "command": ".cursor/hooks/ensure-codegraph.sh"
+      },
+      {
+        "command": ".cursor/hooks/codegraph-autosync.py"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": ".cursor/hooks/codegraph-autosync.py"
       }
     ],
     "preCompact": [
